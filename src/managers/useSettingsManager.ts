@@ -20,33 +20,34 @@ export interface UseSettingsManagerResult {
 
 export function useSettingsManager(client: WhisperlyClient): UseSettingsManagerResult {
   const store = useSettingsStore();
+  const { setSettings, setLoading, setError } = store;
   const settingsQuery = useSettings(client);
   const updateMutation = useUpdateSettings(client);
 
   // Sync query data to store
   useEffect(() => {
     if (settingsQuery.data) {
-      store.setSettings(settingsQuery.data);
+      setSettings(settingsQuery.data);
     }
-  }, [settingsQuery.data]);
+  }, [settingsQuery.data, setSettings]);
 
   useEffect(() => {
-    store.setLoading(settingsQuery.isLoading);
-  }, [settingsQuery.isLoading]);
+    setLoading(settingsQuery.isLoading);
+  }, [settingsQuery.isLoading, setLoading]);
 
   useEffect(() => {
     if (settingsQuery.error) {
-      store.setError(settingsQuery.error.message);
+      setError(settingsQuery.error.message);
     }
-  }, [settingsQuery.error]);
+  }, [settingsQuery.error, setError]);
 
   const updateSettings = useCallback(
     async (data: UserSettingsUpdateRequest) => {
       const result = await updateMutation.mutateAsync(data);
-      store.setSettings(result);
+      setSettings(result);
       return result;
     },
-    [updateMutation, store]
+    [updateMutation, setSettings]
   );
 
   const refetch = useCallback(() => {

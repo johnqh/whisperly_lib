@@ -30,6 +30,13 @@ export function useAnalyticsManager(
 ): UseAnalyticsManagerResult {
   const { startDate, endDate, projectId, enabled = true } = options;
   const store = useAnalyticsStore();
+  const {
+    setAnalytics,
+    setLoading,
+    setError,
+    setDateRange: storeSetDateRange,
+    setFilterProjectId: storeSetFilterProjectId,
+  } = store;
   const analyticsQuery = useAnalytics(client, {
     startDate,
     endDate,
@@ -40,41 +47,41 @@ export function useAnalyticsManager(
   // Sync query data to store
   useEffect(() => {
     if (analyticsQuery.data) {
-      store.setAnalytics(analyticsQuery.data);
+      setAnalytics(analyticsQuery.data);
     }
-  }, [analyticsQuery.data]);
+  }, [analyticsQuery.data, setAnalytics]);
 
   useEffect(() => {
-    store.setLoading(analyticsQuery.isLoading);
-  }, [analyticsQuery.isLoading]);
+    setLoading(analyticsQuery.isLoading);
+  }, [analyticsQuery.isLoading, setLoading]);
 
   useEffect(() => {
     if (analyticsQuery.error) {
-      store.setError(analyticsQuery.error.message);
+      setError(analyticsQuery.error.message);
     }
-  }, [analyticsQuery.error]);
+  }, [analyticsQuery.error, setError]);
 
   // Sync options to store
   useEffect(() => {
-    store.setDateRange(startDate ?? null, endDate ?? null);
-  }, [startDate, endDate]);
+    storeSetDateRange(startDate ?? null, endDate ?? null);
+  }, [startDate, endDate, storeSetDateRange]);
 
   useEffect(() => {
-    store.setFilterProjectId(projectId ?? null);
-  }, [projectId]);
+    storeSetFilterProjectId(projectId ?? null);
+  }, [projectId, storeSetFilterProjectId]);
 
   const setDateRange = useCallback(
     (start: string | null, end: string | null) => {
-      store.setDateRange(start, end);
+      storeSetDateRange(start, end);
     },
-    [store]
+    [storeSetDateRange]
   );
 
   const setFilterProjectId = useCallback(
     (id: string | null) => {
-      store.setFilterProjectId(id);
+      storeSetFilterProjectId(id);
     },
-    [store]
+    [storeSetFilterProjectId]
   );
 
   const refetch = useCallback(() => {
