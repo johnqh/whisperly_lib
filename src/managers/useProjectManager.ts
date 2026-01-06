@@ -32,6 +32,15 @@ export interface UseProjectManagerResult {
 
 export function useProjectManager(client: WhisperlyClient): UseProjectManagerResult {
   const store = useProjectStore();
+  const {
+    setProjects,
+    setLoading,
+    setError,
+    addProject,
+    updateProject: storeUpdateProject,
+    removeProject,
+    selectProject: storeSelectProject,
+  } = store;
   const projectsQuery = useProjects(client);
   const createMutation = useCreateProject(client);
   const updateMutation = useUpdateProject(client);
@@ -40,51 +49,51 @@ export function useProjectManager(client: WhisperlyClient): UseProjectManagerRes
   // Sync query data to store
   useEffect(() => {
     if (projectsQuery.data) {
-      store.setProjects(projectsQuery.data);
+      setProjects(projectsQuery.data);
     }
-  }, [projectsQuery.data]);
+  }, [projectsQuery.data, setProjects]);
 
   useEffect(() => {
-    store.setLoading(projectsQuery.isLoading);
-  }, [projectsQuery.isLoading]);
+    setLoading(projectsQuery.isLoading);
+  }, [projectsQuery.isLoading, setLoading]);
 
   useEffect(() => {
     if (projectsQuery.error) {
-      store.setError(projectsQuery.error.message);
+      setError(projectsQuery.error.message);
     }
-  }, [projectsQuery.error]);
+  }, [projectsQuery.error, setError]);
 
   const createProject = useCallback(
     async (data: ProjectCreateRequest) => {
       const result = await createMutation.mutateAsync(data);
-      store.addProject(result);
+      addProject(result);
       return result;
     },
-    [createMutation, store]
+    [createMutation, addProject]
   );
 
   const updateProject = useCallback(
     async (projectId: string, data: ProjectUpdateRequest) => {
       const result = await updateMutation.mutateAsync({ projectId, data });
-      store.updateProject(result);
+      storeUpdateProject(result);
       return result;
     },
-    [updateMutation, store]
+    [updateMutation, storeUpdateProject]
   );
 
   const deleteProject = useCallback(
     async (projectId: string) => {
       await deleteMutation.mutateAsync(projectId);
-      store.removeProject(projectId);
+      removeProject(projectId);
     },
-    [deleteMutation, store]
+    [deleteMutation, removeProject]
   );
 
   const selectProject = useCallback(
     (projectId: string | null) => {
-      store.selectProject(projectId);
+      storeSelectProject(projectId);
     },
-    [store]
+    [storeSelectProject]
   );
 
   const refetch = useCallback(() => {
@@ -125,13 +134,13 @@ export interface UseProjectDetailResult {
 
 export function useProjectDetail(client: WhisperlyClient, projectId: string): UseProjectDetailResult {
   const projectQuery = useProject(client, projectId);
-  const store = useProjectStore();
+  const { updateProject } = useProjectStore();
 
   useEffect(() => {
     if (projectQuery.data) {
-      store.updateProject(projectQuery.data);
+      updateProject(projectQuery.data);
     }
-  }, [projectQuery.data]);
+  }, [projectQuery.data, updateProject]);
 
   return {
     project: projectQuery.data ?? null,

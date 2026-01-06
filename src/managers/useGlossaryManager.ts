@@ -37,6 +37,15 @@ export interface UseGlossaryManagerResult {
 
 export function useGlossaryManager(client: WhisperlyClient, projectId: string): UseGlossaryManagerResult {
   const store = useGlossaryStore();
+  const {
+    setGlossaries,
+    setLoading,
+    setError,
+    addGlossary,
+    updateGlossary: storeUpdateGlossary,
+    removeGlossary,
+    selectGlossary: storeSelectGlossary,
+  } = store;
   const glossariesQuery = useGlossaries(client, projectId);
   const createMutation = useCreateGlossary(client);
   const updateMutation = useUpdateGlossary(client);
@@ -47,27 +56,27 @@ export function useGlossaryManager(client: WhisperlyClient, projectId: string): 
   // Sync query data to store
   useEffect(() => {
     if (glossariesQuery.data && projectId) {
-      store.setGlossaries(projectId, glossariesQuery.data);
+      setGlossaries(projectId, glossariesQuery.data);
     }
-  }, [glossariesQuery.data, projectId]);
+  }, [glossariesQuery.data, projectId, setGlossaries]);
 
   useEffect(() => {
-    store.setLoading(glossariesQuery.isLoading);
-  }, [glossariesQuery.isLoading]);
+    setLoading(glossariesQuery.isLoading);
+  }, [glossariesQuery.isLoading, setLoading]);
 
   useEffect(() => {
     if (glossariesQuery.error) {
-      store.setError(glossariesQuery.error.message);
+      setError(glossariesQuery.error.message);
     }
-  }, [glossariesQuery.error]);
+  }, [glossariesQuery.error, setError]);
 
   const createGlossary = useCallback(
     async (data: GlossaryCreateRequest) => {
       const result = await createMutation.mutateAsync({ projectId, data });
-      store.addGlossary(projectId, result);
+      addGlossary(projectId, result);
       return result;
     },
-    [createMutation, projectId, store]
+    [createMutation, projectId, addGlossary]
   );
 
   const updateGlossary = useCallback(
@@ -77,27 +86,27 @@ export function useGlossaryManager(client: WhisperlyClient, projectId: string): 
         glossaryId,
         data,
       });
-      store.updateGlossary(projectId, result);
+      storeUpdateGlossary(projectId, result);
       return result;
     },
-    [updateMutation, projectId, store]
+    [updateMutation, projectId, storeUpdateGlossary]
   );
 
   const deleteGlossary = useCallback(
     async (glossaryId: string) => {
       await deleteMutation.mutateAsync({ projectId, glossaryId });
-      store.removeGlossary(projectId, glossaryId);
+      removeGlossary(projectId, glossaryId);
     },
-    [deleteMutation, projectId, store]
+    [deleteMutation, projectId, removeGlossary]
   );
 
   const importGlossaries = useCallback(
     async (glossaries: GlossaryCreateRequest[]) => {
       const results = await importMutation.mutateAsync({ projectId, glossaries });
-      results.forEach(g => store.addGlossary(projectId, g));
+      results.forEach(g => addGlossary(projectId, g));
       return results;
     },
-    [importMutation, projectId, store]
+    [importMutation, projectId, addGlossary]
   );
 
   const exportGlossaries = useCallback(
@@ -109,9 +118,9 @@ export function useGlossaryManager(client: WhisperlyClient, projectId: string): 
 
   const selectGlossary = useCallback(
     (glossaryId: string | null) => {
-      store.selectGlossary(glossaryId);
+      storeSelectGlossary(glossaryId);
     },
-    [store]
+    [storeSelectGlossary]
   );
 
   const refetch = useCallback(() => {

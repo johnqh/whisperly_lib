@@ -25,31 +25,32 @@ export interface UseSubscriptionManagerResult {
 
 export function useSubscriptionManager(client: WhisperlyClient): UseSubscriptionManagerResult {
   const store = useSubscriptionStore();
+  const { setSubscription, setLoading, setError } = store;
   const subscriptionQuery = useSubscription(client);
   const syncMutation = useSyncSubscription(client);
 
   // Sync query data to store
   useEffect(() => {
     if (subscriptionQuery.data) {
-      store.setSubscription(subscriptionQuery.data);
+      setSubscription(subscriptionQuery.data);
     }
-  }, [subscriptionQuery.data]);
+  }, [subscriptionQuery.data, setSubscription]);
 
   useEffect(() => {
-    store.setLoading(subscriptionQuery.isLoading);
-  }, [subscriptionQuery.isLoading]);
+    setLoading(subscriptionQuery.isLoading);
+  }, [subscriptionQuery.isLoading, setLoading]);
 
   useEffect(() => {
     if (subscriptionQuery.error) {
-      store.setError(subscriptionQuery.error.message);
+      setError(subscriptionQuery.error.message);
     }
-  }, [subscriptionQuery.error]);
+  }, [subscriptionQuery.error, setError]);
 
   const syncWithRevenueCat = useCallback(async () => {
     const result = await syncMutation.mutateAsync();
-    store.setSubscription(result);
+    setSubscription(result);
     return result;
-  }, [syncMutation, store]);
+  }, [syncMutation, setSubscription]);
 
   const refetch = useCallback(() => {
     return subscriptionQuery.refetch();
