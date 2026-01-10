@@ -3,6 +3,13 @@
 ## Project Overview
 `@sudobility/whisperly_lib` is the frontend business logic library for Whisperly. It provides Zustand stores for state management and manager hooks that sync TanStack Query data with local state. This library sits between the API client (whisperly_client) and the UI (whisperly_app).
 
+## Platform Support
+- **Web App**: Yes
+- **React Native**: Yes
+- **Backend (Node.js/Bun)**: No (client-side only)
+
+This library is designed to work in both web and React Native environments. Tests use node environment to ensure no DOM-specific APIs are used.
+
 ## Tech Stack
 - **Runtime**: Bun
 - **Language**: TypeScript 5.9+
