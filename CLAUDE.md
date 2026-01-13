@@ -43,12 +43,12 @@ src/
 │   └── analyticsStore.test.ts
 ├── managers/
 │   ├── index.ts              # Managers barrel export
-│   ├── useProjectManager.ts  # Syncs projects query to store
-│   ├── useGlossaryManager.ts # Syncs glossaries to store
-│   ├── useSettingsManager.ts # Syncs settings to store
-│   ├── useSubscriptionManager.ts # Syncs subscription + RevenueCat
-│   ├── useAnalyticsManager.ts    # Syncs analytics with filters
-│   └── useTranslationManager.ts  # Translation mutations
+│   ├── useProjectManager.ts  # Syncs projects query to store (entity-scoped)
+│   ├── useGlossaryManager.ts # Syncs glossaries to store (entity+project scoped)
+│   ├── useSettingsManager.ts # Syncs settings to store (user-scoped)
+│   ├── useSubscriptionManager.ts # Syncs subscription (user-scoped)
+│   ├── useAnalyticsManager.ts    # Syncs analytics (entity-scoped)
+│   └── useTranslationManager.ts  # Translation mutations (public endpoint)
 ├── hooks/
 │   ├── index.ts              # Hooks barrel export
 │   ├── useFirebaseAuth.ts    # Firebase auth state
@@ -71,6 +71,12 @@ bun run test:run     # Run tests once
 
 ## Architecture
 
+### API Structure (Entity-Centric)
+The managers follow the entity-centric API structure:
+- **Entity-scoped**: Projects, endpoints, glossaries, analytics - require `entitySlug`
+- **User-scoped**: Settings, subscription - require `userId`
+- **Public**: Translation - requires `orgPath`, `projectName`, `endpointName`
+
 ### Store Layer (Zustand)
 Each store manages a domain's local state:
 ```typescript
@@ -86,17 +92,17 @@ useProjectStore.getState().addProject(project);
 ```
 
 ### Manager Layer (Hooks)
-Managers connect TanStack Query to Zustand stores:
+Managers connect TanStack Query to Zustand stores with entity-centric parameters:
 ```typescript
 import { useProjectManager } from '@sudobility/whisperly_lib';
 
-function MyComponent() {
+function MyComponent({ entitySlug }) {
   const {
     projects,        // From store
     isLoading,       // From query
     createProject,   // Mutation
     refetch,         // Re-fetch data
-  } = useProjectManager();
+  } = useProjectManager(client, entitySlug);
 }
 ```
 
@@ -107,6 +113,44 @@ import { useFirebaseAuth } from '@sudobility/whisperly_lib';
 function App() {
   const { user, loading, getIdToken } = useFirebaseAuth();
 }
+```
+
+## Manager Signatures
+
+### Entity-scoped Managers
+```typescript
+// Projects (entity-scoped)
+useProjectManager(client: WhisperlyClient, entitySlug: string)
+useProjectDetail(client: WhisperlyClient, entitySlug: string, projectId: string)
+
+// Glossaries (entity + project scoped)
+useGlossaryManager(client: WhisperlyClient, entitySlug: string, projectId: string)
+
+// Analytics (entity-scoped)
+useAnalyticsManager(client: WhisperlyClient, entitySlug: string, options?: UseAnalyticsManagerOptions)
+```
+
+### User-scoped Managers
+```typescript
+// Settings (user-scoped)
+useSettingsManager(client: WhisperlyClient, userId: string)
+
+// Subscription (user-scoped)
+useSubscriptionManager(client: WhisperlyClient, userId: string)
+```
+
+### Public Managers
+```typescript
+// Translation (public endpoint)
+const { translate } = useTranslationManager(client);
+
+// Translate params
+translate({
+  orgPath: 'my-org',
+  projectName: 'my-project',
+  endpointName: 'translate',
+  request: { strings: ['Hello'], target_languages: ['es'] }
+});
 ```
 
 ## Store Patterns
@@ -159,16 +203,16 @@ const glossaries = useGlossaryStore(selectGlossariesForProject('proj-123'));
 ### Adding New Managers
 1. Create manager in `src/managers/`
 2. Use corresponding client hook from whisperly_client
-3. Sync query data to store with useEffect
-4. Return combined state + mutations
-5. Export from `src/managers/index.ts`
+3. Pass required scope parameters (entitySlug, userId, etc.)
+4. Sync query data to store with useEffect
+5. Return combined state + mutations
+6. Export from `src/managers/index.ts`
 
-### Manager Pattern
+### Manager Pattern (Entity-scoped)
 ```typescript
-export function useProjectManager() {
-  const client = useWhisperlyClient();
-  const { data, isLoading, refetch } = useProjects(client);
+export function useProjectManager(client: WhisperlyClient, entitySlug: string) {
   const { setProjects, setLoading } = useProjectStore();
+  const { data, isLoading, refetch } = useProjects(client, entitySlug);
 
   // Sync to store
   useEffect(() => {
@@ -179,7 +223,7 @@ export function useProjectManager() {
     setLoading(isLoading);
   }, [isLoading, setLoading]);
 
-  const createProject = useCreateProject(client);
+  const createProject = useCreateProject(client, entitySlug);
 
   return {
     projects: useProjectStore(state => state.projects),

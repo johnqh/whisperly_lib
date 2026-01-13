@@ -26,6 +26,7 @@ export interface UseAnalyticsManagerResult {
 
 export function useAnalyticsManager(
   client: WhisperlyClient,
+  entitySlug: string,
   options: UseAnalyticsManagerOptions = {}
 ): UseAnalyticsManagerResult {
   const { startDate, endDate, projectId, enabled = true } = options;
@@ -37,7 +38,7 @@ export function useAnalyticsManager(
     setDateRange: storeSetDateRange,
     setFilterProjectId: storeSetFilterProjectId,
   } = store;
-  const analyticsQuery = useAnalytics(client, {
+  const analyticsQuery = useAnalytics(client, entitySlug, {
     startDate,
     endDate,
     projectId,

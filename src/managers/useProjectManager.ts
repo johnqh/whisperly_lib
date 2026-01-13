@@ -30,7 +30,7 @@ export interface UseProjectManagerResult {
   isDeleting: boolean;
 }
 
-export function useProjectManager(client: WhisperlyClient): UseProjectManagerResult {
+export function useProjectManager(client: WhisperlyClient, entitySlug: string): UseProjectManagerResult {
   const store = useProjectStore();
   const {
     setProjects,
@@ -41,10 +41,10 @@ export function useProjectManager(client: WhisperlyClient): UseProjectManagerRes
     removeProject,
     selectProject: storeSelectProject,
   } = store;
-  const projectsQuery = useProjects(client);
-  const createMutation = useCreateProject(client);
-  const updateMutation = useUpdateProject(client);
-  const deleteMutation = useDeleteProject(client);
+  const projectsQuery = useProjects(client, entitySlug);
+  const createMutation = useCreateProject(client, entitySlug);
+  const updateMutation = useUpdateProject(client, entitySlug);
+  const deleteMutation = useDeleteProject(client, entitySlug);
 
   // Sync query data to store
   useEffect(() => {
@@ -132,8 +132,8 @@ export interface UseProjectDetailResult {
   refetch: () => void;
 }
 
-export function useProjectDetail(client: WhisperlyClient, projectId: string): UseProjectDetailResult {
-  const projectQuery = useProject(client, projectId);
+export function useProjectDetail(client: WhisperlyClient, entitySlug: string, projectId: string): UseProjectDetailResult {
+  const projectQuery = useProject(client, entitySlug, projectId);
   const { updateProject } = useProjectStore();
 
   useEffect(() => {

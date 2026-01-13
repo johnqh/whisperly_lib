@@ -3,7 +3,6 @@ import { resetAllStores } from './resetAllStores';
 import { useProjectStore } from '../stores/projectStore';
 import { useGlossaryStore } from '../stores/glossaryStore';
 import { useSettingsStore } from '../stores/settingsStore';
-import { useSubscriptionStore } from '../stores/subscriptionStore';
 import { useAnalyticsStore } from '../stores/analyticsStore';
 
 describe('resetAllStores', () => {
@@ -12,7 +11,6 @@ describe('resetAllStores', () => {
     useProjectStore.getState().setLoading(true);
     useGlossaryStore.getState().setLoading(true);
     useSettingsStore.getState().setLoading(true);
-    useSubscriptionStore.getState().setLoading(true);
     useAnalyticsStore.getState().setLoading(true);
   });
 
@@ -21,7 +19,6 @@ describe('resetAllStores', () => {
     expect(useProjectStore.getState().isLoading).toBe(true);
     expect(useGlossaryStore.getState().isLoading).toBe(true);
     expect(useSettingsStore.getState().isLoading).toBe(true);
-    expect(useSubscriptionStore.getState().isLoading).toBe(true);
     expect(useAnalyticsStore.getState().isLoading).toBe(true);
 
     // Reset all
@@ -31,7 +28,6 @@ describe('resetAllStores', () => {
     expect(useProjectStore.getState().isLoading).toBe(false);
     expect(useGlossaryStore.getState().isLoading).toBe(false);
     expect(useSettingsStore.getState().isLoading).toBe(false);
-    expect(useSubscriptionStore.getState().isLoading).toBe(false);
     expect(useAnalyticsStore.getState().isLoading).toBe(false);
   });
 
@@ -40,7 +36,7 @@ describe('resetAllStores', () => {
     useProjectStore.getState().setProjects([
       {
         id: 'p1',
-        user_id: 'u1',
+        entity_id: 'e1',
         project_name: 'test',
         display_name: 'Test',
         description: null,
@@ -63,7 +59,7 @@ describe('resetAllStores', () => {
     ]);
     useSettingsStore.getState().setSettings({
       id: 's1',
-      user_id: 'u1',
+      firebase_uid: 'u1',
       organization_name: 'Test',
       organization_path: 'test',
       is_default: true,
@@ -78,7 +74,6 @@ describe('resetAllStores', () => {
     expect(useProjectStore.getState().projects).toEqual([]);
     expect(useGlossaryStore.getState().glossaries).toEqual({});
     expect(useSettingsStore.getState().settings).toBeNull();
-    expect(useSubscriptionStore.getState().subscription).toBeNull();
     expect(useAnalyticsStore.getState().analytics).toBeNull();
   });
 });

@@ -35,7 +35,11 @@ export interface UseGlossaryManagerResult {
   isExporting: boolean;
 }
 
-export function useGlossaryManager(client: WhisperlyClient, projectId: string): UseGlossaryManagerResult {
+export function useGlossaryManager(
+  client: WhisperlyClient,
+  entitySlug: string,
+  projectId: string
+): UseGlossaryManagerResult {
   const store = useGlossaryStore();
   const {
     setGlossaries,
@@ -46,12 +50,12 @@ export function useGlossaryManager(client: WhisperlyClient, projectId: string): 
     removeGlossary,
     selectGlossary: storeSelectGlossary,
   } = store;
-  const glossariesQuery = useGlossaries(client, projectId);
-  const createMutation = useCreateGlossary(client);
-  const updateMutation = useUpdateGlossary(client);
-  const deleteMutation = useDeleteGlossary(client);
-  const importMutation = useImportGlossaries(client);
-  const exportMutation = useExportGlossaries(client);
+  const glossariesQuery = useGlossaries(client, entitySlug, projectId);
+  const createMutation = useCreateGlossary(client, entitySlug);
+  const updateMutation = useUpdateGlossary(client, entitySlug);
+  const deleteMutation = useDeleteGlossary(client, entitySlug);
+  const importMutation = useImportGlossaries(client, entitySlug);
+  const exportMutation = useExportGlossaries(client, entitySlug);
 
   // Sync query data to store
   useEffect(() => {

@@ -18,11 +18,11 @@ export interface UseSettingsManagerResult {
   isUpdating: boolean;
 }
 
-export function useSettingsManager(client: WhisperlyClient): UseSettingsManagerResult {
+export function useSettingsManager(client: WhisperlyClient, userId: string): UseSettingsManagerResult {
   const store = useSettingsStore();
   const { setSettings, setLoading, setError } = store;
-  const settingsQuery = useSettings(client);
-  const updateMutation = useUpdateSettings(client);
+  const settingsQuery = useSettings(client, userId);
+  const updateMutation = useUpdateSettings(client, userId);
 
   // Sync query data to store
   useEffect(() => {

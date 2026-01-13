@@ -13,12 +13,11 @@ export {
   type UseSettingsManagerResult,
 } from './useSettingsManager';
 export {
-  useSubscriptionManager,
-  type UseSubscriptionManagerResult,
-} from './useSubscriptionManager';
-export {
   useAnalyticsManager,
   type UseAnalyticsManagerOptions,
   type UseAnalyticsManagerResult,
 } from './useAnalyticsManager';
-export { useTranslationManager } from './useTranslationManager';
+export {
+  useTranslationManager,
+  type TranslateParams,
+} from './useTranslationManager';
