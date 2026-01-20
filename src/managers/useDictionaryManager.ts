@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   useCreateDictionary,
   useUpdateDictionary,
@@ -11,6 +11,16 @@ import type {
   DictionarySearchResponse,
 } from '@sudobility/whisperly_types';
 import { useDictionaryStore } from '../stores/dictionaryStore';
+
+/**
+ * Configuration for useDictionaryManager
+ */
+export interface UseDictionaryManagerConfig {
+  baseUrl: string;
+  getIdToken: () => Promise<string | undefined>;
+  entitySlug: string;
+  projectId: string;
+}
 
 export interface UseDictionaryManagerResult {
   dictionaries: DictionarySearchResponse[];
@@ -27,11 +37,15 @@ export interface UseDictionaryManagerResult {
   isDeleting: boolean;
 }
 
-export function useDictionaryManager(
-  client: WhisperlyClient,
-  entitySlug: string,
-  projectId: string
-): UseDictionaryManagerResult {
+export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDictionaryManagerResult {
+  const { baseUrl, getIdToken, entitySlug, projectId } = config;
+
+  // Create client internally
+  const client = useMemo(
+    () => new WhisperlyClient({ baseUrl, getIdToken }),
+    [baseUrl, getIdToken]
+  );
+
   const store = useDictionaryStore();
   const {
     addDictionary,

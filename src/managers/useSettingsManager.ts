@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import {
   useSettings,
   useUpdateSettings,
@@ -6,6 +6,15 @@ import {
 } from '@sudobility/whisperly_client';
 import type { UserSettings, UserSettingsUpdateRequest } from '@sudobility/whisperly_types';
 import { useSettingsStore } from '../stores/settingsStore';
+
+/**
+ * Configuration for useSettingsManager
+ */
+export interface UseSettingsManagerConfig {
+  baseUrl: string;
+  getIdToken: () => Promise<string | undefined>;
+  userId: string;
+}
 
 export interface UseSettingsManagerResult {
   settings: UserSettings | null;
@@ -18,7 +27,15 @@ export interface UseSettingsManagerResult {
   isUpdating: boolean;
 }
 
-export function useSettingsManager(client: WhisperlyClient, userId: string): UseSettingsManagerResult {
+export function useSettingsManager(config: UseSettingsManagerConfig): UseSettingsManagerResult {
+  const { baseUrl, getIdToken, userId } = config;
+
+  // Create client internally
+  const client = useMemo(
+    () => new WhisperlyClient({ baseUrl, getIdToken }),
+    [baseUrl, getIdToken]
+  );
+
   const store = useSettingsStore();
   const { setSettings, setLoading, setError } = store;
   const settingsQuery = useSettings(client, userId);

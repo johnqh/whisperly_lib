@@ -1,9 +1,16 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { useTranslate, WhisperlyClient } from '@sudobility/whisperly_client';
 import type {
   TranslationRequest,
   TranslationResponse,
 } from '@sudobility/whisperly_types';
+
+/**
+ * Configuration for useTranslationManager
+ */
+export interface UseTranslationManagerConfig {
+  baseUrl: string;
+}
 
 export interface TranslateParams {
   orgPath: string;
@@ -11,7 +18,18 @@ export interface TranslateParams {
   request: TranslationRequest;
 }
 
-export function useTranslationManager(client: WhisperlyClient) {
+export function useTranslationManager(config: UseTranslationManagerConfig) {
+  const { baseUrl } = config;
+
+  // Create client internally - translation doesn't need auth
+  const client = useMemo(
+    () => new WhisperlyClient({
+      baseUrl,
+      getIdToken: async () => undefined,
+    }),
+    [baseUrl]
+  );
+
   const translateMutation = useTranslate(client);
   const [lastResponse, setLastResponse] = useState<TranslationResponse | null>(
     null

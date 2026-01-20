@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import {
   useProjects,
   useProject,
@@ -13,6 +13,17 @@ import type {
   ProjectUpdateRequest,
 } from '@sudobility/whisperly_types';
 import { useProjectStore } from '../stores/projectStore';
+
+/**
+ * Configuration for useProjectManager
+ */
+export interface UseProjectManagerConfig {
+  baseUrl: string;
+  getIdToken: () => Promise<string | undefined>;
+  entitySlug: string;
+  /** Auto-fetch on mount when enabled (default: true) */
+  autoFetch?: boolean;
+}
 
 export interface UseProjectManagerResult {
   projects: Project[];
@@ -30,7 +41,15 @@ export interface UseProjectManagerResult {
   isDeleting: boolean;
 }
 
-export function useProjectManager(client: WhisperlyClient, entitySlug: string): UseProjectManagerResult {
+export function useProjectManager(config: UseProjectManagerConfig): UseProjectManagerResult {
+  const { baseUrl, getIdToken, entitySlug } = config;
+
+  // Create client internally
+  const client = useMemo(
+    () => new WhisperlyClient({ baseUrl, getIdToken }),
+    [baseUrl, getIdToken]
+  );
+
   const store = useProjectStore();
   const {
     setProjects,
@@ -41,6 +60,7 @@ export function useProjectManager(client: WhisperlyClient, entitySlug: string): 
     removeProject,
     selectProject: storeSelectProject,
   } = store;
+
   const projectsQuery = useProjects(client, entitySlug);
   const createMutation = useCreateProject(client, entitySlug);
   const updateMutation = useUpdateProject(client, entitySlug);
@@ -125,6 +145,16 @@ export function useProjectManager(client: WhisperlyClient, entitySlug: string): 
   };
 }
 
+/**
+ * Configuration for useProjectDetail
+ */
+export interface UseProjectDetailConfig {
+  baseUrl: string;
+  getIdToken: () => Promise<string | undefined>;
+  entitySlug: string;
+  projectId: string;
+}
+
 export interface UseProjectDetailResult {
   project: Project | null;
   isLoading: boolean;
@@ -132,7 +162,15 @@ export interface UseProjectDetailResult {
   refetch: () => void;
 }
 
-export function useProjectDetail(client: WhisperlyClient, entitySlug: string, projectId: string): UseProjectDetailResult {
+export function useProjectDetail(config: UseProjectDetailConfig): UseProjectDetailResult {
+  const { baseUrl, getIdToken, entitySlug, projectId } = config;
+
+  // Create client internally
+  const client = useMemo(
+    () => new WhisperlyClient({ baseUrl, getIdToken }),
+    [baseUrl, getIdToken]
+  );
+
   const projectQuery = useProject(client, entitySlug, projectId);
   const { updateProject } = useProjectStore();
 

@@ -1,7 +1,20 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useAnalytics, WhisperlyClient } from '@sudobility/whisperly_client';
 import type { AnalyticsResponse, UsageAggregate, UsageByProject, UsageByDate } from '@sudobility/whisperly_types';
 import { useAnalyticsStore } from '../stores/analyticsStore';
+
+/**
+ * Configuration for useAnalyticsManager
+ */
+export interface UseAnalyticsManagerConfig {
+  baseUrl: string;
+  getIdToken: () => Promise<string | undefined>;
+  entitySlug: string;
+  startDate?: string;
+  endDate?: string;
+  projectId?: string;
+  enabled?: boolean;
+}
 
 export interface UseAnalyticsManagerOptions {
   startDate?: string;
@@ -24,12 +37,23 @@ export interface UseAnalyticsManagerResult {
   refetch: () => void;
 }
 
-export function useAnalyticsManager(
-  client: WhisperlyClient,
-  entitySlug: string,
-  options: UseAnalyticsManagerOptions = {}
-): UseAnalyticsManagerResult {
-  const { startDate, endDate, projectId, enabled = true } = options;
+export function useAnalyticsManager(config: UseAnalyticsManagerConfig): UseAnalyticsManagerResult {
+  const {
+    baseUrl,
+    getIdToken,
+    entitySlug,
+    startDate,
+    endDate,
+    projectId,
+    enabled = true,
+  } = config;
+
+  // Create client internally
+  const client = useMemo(
+    () => new WhisperlyClient({ baseUrl, getIdToken }),
+    [baseUrl, getIdToken]
+  );
+
   const store = useAnalyticsStore();
   const {
     setAnalytics,
@@ -38,6 +62,7 @@ export function useAnalyticsManager(
     setDateRange: storeSetDateRange,
     setFilterProjectId: storeSetFilterProjectId,
   } = store;
+
   const analyticsQuery = useAnalytics(client, entitySlug, {
     startDate,
     endDate,

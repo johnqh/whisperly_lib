@@ -36,30 +36,35 @@ export {
 export {
   useProjectManager,
   useProjectDetail,
+  type UseProjectManagerConfig,
   type UseProjectManagerResult,
+  type UseProjectDetailConfig,
   type UseProjectDetailResult,
 } from './managers/useProjectManager';
 export {
   useDictionaryManager,
+  type UseDictionaryManagerConfig,
   type UseDictionaryManagerResult,
 } from './managers/useDictionaryManager';
 export {
   useSettingsManager,
+  type UseSettingsManagerConfig,
   type UseSettingsManagerResult,
 } from './managers/useSettingsManager';
 export {
   useAnalyticsManager,
+  type UseAnalyticsManagerConfig,
   type UseAnalyticsManagerOptions,
   type UseAnalyticsManagerResult,
 } from './managers/useAnalyticsManager';
-export { useTranslationManager } from './managers/useTranslationManager';
+export {
+  useTranslationManager,
+  type UseTranslationManagerConfig,
+  type TranslateParams,
+} from './managers/useTranslationManager';
 
 // Hooks
 export { useFirebaseAuth, type UseFirebaseAuthResult } from './hooks/useFirebaseAuth';
-export {
-  useWhisperlyClient,
-  type UseWhisperlyClientOptions,
-} from './hooks/useWhisperlyClient';
 
 // Utils
 export { resetAllStores } from './utils/resetAllStores';
