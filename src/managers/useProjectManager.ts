@@ -51,7 +51,8 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
   );
 
   // Use selectors for state to avoid stale closure issues
-  const projects = useProjectStore(state => state.projects);
+  // Defensive: ensure projects is always an array even if store has issues
+  const projects = useProjectStore(state => state.projects) ?? [];
   const selectedProjectId = useProjectStore(state => state.selectedProjectId);
   const isLoadingFromStore = useProjectStore(state => state.isLoading);
   const errorFromStore = useProjectStore(state => state.error);
@@ -122,11 +123,14 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
     return projectsQuery.refetch();
   }, [projectsQuery]);
 
+  // Ensure projects is array before returning (defensive)
+  const safeProjects = Array.isArray(projects) ? projects : [];
+
   return {
     // Data
-    projects,
+    projects: safeProjects,
     selectedProjectId,
-    selectedProject: projects.find(p => p.id === selectedProjectId) ?? null,
+    selectedProject: safeProjects.find(p => p.id === selectedProjectId) ?? null,
 
     // State
     isLoading: isLoadingFromStore || createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
