@@ -50,16 +50,18 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
     [baseUrl, getIdToken]
   );
 
-  const store = useProjectStore();
-  const {
-    setProjects,
-    setLoading,
-    setError,
-    addProject,
-    updateProject: storeUpdateProject,
-    removeProject,
-    selectProject: storeSelectProject,
-  } = store;
+  // Use selectors for state to avoid stale closure issues
+  const projects = useProjectStore(state => state.projects);
+  const selectedProjectId = useProjectStore(state => state.selectedProjectId);
+  const isLoadingFromStore = useProjectStore(state => state.isLoading);
+  const errorFromStore = useProjectStore(state => state.error);
+  const setProjects = useProjectStore(state => state.setProjects);
+  const setLoading = useProjectStore(state => state.setLoading);
+  const setError = useProjectStore(state => state.setError);
+  const addProject = useProjectStore(state => state.addProject);
+  const storeUpdateProject = useProjectStore(state => state.updateProject);
+  const removeProject = useProjectStore(state => state.removeProject);
+  const storeSelectProject = useProjectStore(state => state.selectProject);
 
   const projectsQuery = useProjects(client, entitySlug);
   const createMutation = useCreateProject(client, entitySlug);
@@ -122,14 +124,13 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
 
   return {
     // Data
-    projects: store.projects,
-    selectedProjectId: store.selectedProjectId,
-    selectedProject:
-      store.projects.find(p => p.id === store.selectedProjectId) ?? null,
+    projects,
+    selectedProjectId,
+    selectedProject: projects.find(p => p.id === selectedProjectId) ?? null,
 
     // State
-    isLoading: store.isLoading || createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
-    error: store.error,
+    isLoading: isLoadingFromStore || createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
+    error: errorFromStore,
 
     // Actions
     createProject,
