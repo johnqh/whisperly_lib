@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { resetAllStores } from './resetAllStores';
 import { useProjectStore } from '../stores/projectStore';
-import { useGlossaryStore } from '../stores/glossaryStore';
+import { useDictionaryStore } from '../stores/dictionaryStore';
 import { useSettingsStore } from '../stores/settingsStore';
 import { useAnalyticsStore } from '../stores/analyticsStore';
 
@@ -9,7 +9,7 @@ describe('resetAllStores', () => {
   beforeEach(() => {
     // Set up some state in all stores
     useProjectStore.getState().setLoading(true);
-    useGlossaryStore.getState().setLoading(true);
+    useDictionaryStore.getState().setLoading(true);
     useSettingsStore.getState().setLoading(true);
     useAnalyticsStore.getState().setLoading(true);
   });
@@ -17,7 +17,7 @@ describe('resetAllStores', () => {
   it('resets all stores to initial state', () => {
     // Verify stores have state
     expect(useProjectStore.getState().isLoading).toBe(true);
-    expect(useGlossaryStore.getState().isLoading).toBe(true);
+    expect(useDictionaryStore.getState().isLoading).toBe(true);
     expect(useSettingsStore.getState().isLoading).toBe(true);
     expect(useAnalyticsStore.getState().isLoading).toBe(true);
 
@@ -26,7 +26,7 @@ describe('resetAllStores', () => {
 
     // Verify all stores are reset
     expect(useProjectStore.getState().isLoading).toBe(false);
-    expect(useGlossaryStore.getState().isLoading).toBe(false);
+    expect(useDictionaryStore.getState().isLoading).toBe(false);
     expect(useSettingsStore.getState().isLoading).toBe(false);
     expect(useAnalyticsStore.getState().isLoading).toBe(false);
   });
@@ -41,20 +41,18 @@ describe('resetAllStores', () => {
         display_name: 'Test',
         description: null,
         instructions: null,
+        default_source_language: null,
+        default_target_languages: null,
+        ip_allowlist: null,
         is_active: true,
         created_at: new Date(),
         updated_at: new Date(),
       },
     ]);
-    useGlossaryStore.getState().setGlossaries('proj-1', [
+    useDictionaryStore.getState().setDictionaries('proj-1', [
       {
-        id: 'g1',
-        project_id: 'proj-1',
-        term: 'test',
-        translations: {},
-        context: null,
-        created_at: new Date(),
-        updated_at: new Date(),
+        dictionary_id: 'd1',
+        translations: { en: 'hello', ja: 'こんにちは' },
       },
     ]);
     useSettingsStore.getState().setSettings({
@@ -72,7 +70,7 @@ describe('resetAllStores', () => {
 
     // Verify all data is cleared
     expect(useProjectStore.getState().projects).toEqual([]);
-    expect(useGlossaryStore.getState().glossaries).toEqual({});
+    expect(useDictionaryStore.getState().dictionaries).toEqual({});
     expect(useSettingsStore.getState().settings).toBeNull();
     expect(useAnalyticsStore.getState().analytics).toBeNull();
   });

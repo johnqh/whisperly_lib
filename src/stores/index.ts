@@ -8,12 +8,12 @@ export {
 } from './projectStore';
 
 export {
-  useGlossaryStore,
-  selectGlossariesForProject,
-  selectSelectedGlossaryId,
-  selectIsLoading as selectGlossaryIsLoading,
-  selectError as selectGlossaryError,
-} from './glossaryStore';
+  useDictionaryStore,
+  selectDictionariesForProject,
+  selectSelectedDictionaryId,
+  selectIsLoading as selectDictionaryIsLoading,
+  selectError as selectDictionaryError,
+} from './dictionaryStore';
 
 export {
   useSettingsStore,

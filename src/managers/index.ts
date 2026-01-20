@@ -5,9 +5,9 @@ export {
   type UseProjectDetailResult,
 } from './useProjectManager';
 export {
-  useGlossaryManager,
-  type UseGlossaryManagerResult,
-} from './useGlossaryManager';
+  useDictionaryManager,
+  type UseDictionaryManagerResult,
+} from './useDictionaryManager';
 export {
   useSettingsManager,
   type UseSettingsManagerResult,

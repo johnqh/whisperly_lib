@@ -7,12 +7,12 @@ export {
   selectSelectedProject,
   selectProjectIsLoading,
   selectProjectError,
-  // Glossary Store
-  useGlossaryStore,
-  selectGlossariesForProject,
-  selectSelectedGlossaryId,
-  selectGlossaryIsLoading,
-  selectGlossaryError,
+  // Dictionary Store
+  useDictionaryStore,
+  selectDictionariesForProject,
+  selectSelectedDictionaryId,
+  selectDictionaryIsLoading,
+  selectDictionaryError,
   // Settings Store
   useSettingsStore,
   selectSettings,
@@ -40,9 +40,9 @@ export {
   type UseProjectDetailResult,
 } from './managers/useProjectManager';
 export {
-  useGlossaryManager,
-  type UseGlossaryManagerResult,
-} from './managers/useGlossaryManager';
+  useDictionaryManager,
+  type UseDictionaryManagerResult,
+} from './managers/useDictionaryManager';
 export {
   useSettingsManager,
   type UseSettingsManagerResult,
@@ -70,9 +70,12 @@ export type {
   Project,
   ProjectCreateRequest,
   ProjectUpdateRequest,
-  Glossary,
-  GlossaryCreateRequest,
-  GlossaryUpdateRequest,
+  Dictionary,
+  DictionaryEntry,
+  DictionaryTranslations,
+  DictionaryCreateRequest,
+  DictionaryUpdateRequest,
+  DictionarySearchResponse,
   UserSettings,
   UserSettingsUpdateRequest,
   AnalyticsResponse,

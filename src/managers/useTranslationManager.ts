@@ -8,7 +8,6 @@ import type {
 export interface TranslateParams {
   orgPath: string;
   projectName: string;
-  endpointName: string;
   request: TranslationRequest;
 }
 
@@ -20,11 +19,10 @@ export function useTranslationManager(client: WhisperlyClient) {
 
   const translate = useCallback(
     async (params: TranslateParams) => {
-      const { orgPath, projectName, endpointName, request } = params;
+      const { orgPath, projectName, request } = params;
       const result = await translateMutation.mutateAsync({
         orgPath,
         projectName,
-        endpointName,
         request,
       });
       setLastResponse(result);
