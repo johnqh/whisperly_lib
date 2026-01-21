@@ -52,7 +52,8 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
 
   // Use selectors for state to avoid stale closure issues
   // Defensive: ensure projects is always an array even if store has issues
-  const projects = useProjectStore(state => state.projects) ?? [];
+  const projectsFromStore = useProjectStore(state => state.projects);
+  const projects = Array.isArray(projectsFromStore) ? projectsFromStore : [];
   const selectedProjectId = useProjectStore(state => state.selectedProjectId);
   const isLoadingFromStore = useProjectStore(state => state.isLoading);
   const errorFromStore = useProjectStore(state => state.error);
