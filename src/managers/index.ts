@@ -21,3 +21,8 @@ export {
   useTranslationManager,
   type TranslateParams,
 } from './useTranslationManager';
+export {
+  useLanguagesManager,
+  type UseLanguagesManagerConfig,
+  type UseLanguagesManagerResult,
+} from './useLanguagesManager';

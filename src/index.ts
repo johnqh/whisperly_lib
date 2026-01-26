@@ -62,6 +62,11 @@ export {
   type UseTranslationManagerConfig,
   type TranslateParams,
 } from './managers/useTranslationManager';
+export {
+  useLanguagesManager,
+  type UseLanguagesManagerConfig,
+  type UseLanguagesManagerResult,
+} from './managers/useLanguagesManager';
 
 // Hooks
 export { useFirebaseAuth, type UseFirebaseAuthResult } from './hooks/useFirebaseAuth';
@@ -81,6 +86,8 @@ export type {
   DictionaryCreateRequest,
   DictionaryUpdateRequest,
   DictionarySearchResponse,
+  ProjectLanguagesResponse,
+  AvailableLanguage,
   UserSettings,
   UserSettingsUpdateRequest,
   AnalyticsResponse,
