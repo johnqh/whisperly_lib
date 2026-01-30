@@ -1,5 +1,6 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import {
+  useDictionaries,
   useCreateDictionary,
   useUpdateDictionary,
   useDeleteDictionary,
@@ -48,11 +49,40 @@ export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDic
 
   const store = useDictionaryStore();
   const {
+    setDictionaries,
     addDictionary,
     updateDictionary: storeUpdateDictionary,
     removeDictionary,
     selectDictionary: storeSelectDictionary,
+    setLoading,
+    setError,
   } = store;
+
+  // Fetch dictionaries on load
+  const { data: fetchedDictionaries, isLoading: queryLoading, error: queryError } = useDictionaries(
+    client,
+    entitySlug,
+    projectId
+  );
+
+  // Sync fetched data to store
+  useEffect(() => {
+    if (fetchedDictionaries) {
+      setDictionaries(projectId, fetchedDictionaries);
+    }
+  }, [fetchedDictionaries, projectId, setDictionaries]);
+
+  // Sync loading state
+  useEffect(() => {
+    setLoading(queryLoading);
+  }, [queryLoading, setLoading]);
+
+  // Sync error state
+  useEffect(() => {
+    if (queryError) {
+      setError(queryError instanceof Error ? queryError.message : 'Failed to load dictionaries');
+    }
+  }, [queryError, setError]);
 
   const createMutation = useCreateDictionary(client, entitySlug);
   const updateMutation = useUpdateDictionary(client, entitySlug);
