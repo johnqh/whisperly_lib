@@ -2,9 +2,6 @@ import { useEffect, useCallback, useMemo } from 'react';
 import {
   useProjects,
   useProject,
-  useCreateProject,
-  useUpdateProject,
-  useDeleteProject,
   WhisperlyClient,
 } from '@sudobility/whisperly_client';
 import type {
@@ -66,9 +63,6 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
   const storeSelectProject = useProjectStore(state => state.selectProject);
 
   const projectsQuery = useProjects(client, entitySlug);
-  const createMutation = useCreateProject(client, entitySlug);
-  const updateMutation = useUpdateProject(client, entitySlug);
-  const deleteMutation = useDeleteProject(client, entitySlug);
 
   // Sync query data to store
   useEffect(() => {
@@ -89,28 +83,28 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
 
   const createProject = useCallback(
     async (data: ProjectCreateRequest) => {
-      const result = await createMutation.mutateAsync(data);
+      const result = await projectsQuery.createProject.mutateAsync(data);
       addProject(result);
       return result;
     },
-    [createMutation, addProject]
+    [projectsQuery.createProject, addProject]
   );
 
   const updateProject = useCallback(
     async (projectId: string, data: ProjectUpdateRequest) => {
-      const result = await updateMutation.mutateAsync({ projectId, data });
+      const result = await projectsQuery.updateProject.mutateAsync({ projectId, data });
       storeUpdateProject(result);
       return result;
     },
-    [updateMutation, storeUpdateProject]
+    [projectsQuery.updateProject, storeUpdateProject]
   );
 
   const deleteProject = useCallback(
     async (projectId: string) => {
-      await deleteMutation.mutateAsync(projectId);
+      await projectsQuery.deleteProject.mutateAsync(projectId);
       removeProject(projectId);
     },
-    [deleteMutation, removeProject]
+    [projectsQuery.deleteProject, removeProject]
   );
 
   const selectProject = useCallback(
@@ -134,7 +128,7 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
     selectedProject: safeProjects.find(p => p.id === selectedProjectId) ?? null,
 
     // State
-    isLoading: isLoadingFromStore || createMutation.isPending || updateMutation.isPending || deleteMutation.isPending,
+    isLoading: isLoadingFromStore || projectsQuery.createProject.isPending || projectsQuery.updateProject.isPending || projectsQuery.deleteProject.isPending,
     error: errorFromStore,
 
     // Actions
@@ -145,9 +139,9 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
     refetch,
 
     // Mutation states
-    isCreating: createMutation.isPending,
-    isUpdating: updateMutation.isPending,
-    isDeleting: deleteMutation.isPending,
+    isCreating: projectsQuery.createProject.isPending,
+    isUpdating: projectsQuery.updateProject.isPending,
+    isDeleting: projectsQuery.deleteProject.isPending,
   };
 }
 

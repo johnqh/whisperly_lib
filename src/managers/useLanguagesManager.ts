@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { WhisperlyClient } from '@sudobility/whisperly_client';
+import {
+  WhisperlyClient,
+  useProjectLanguages,
+  useAvailableLanguages,
+} from '@sudobility/whisperly_client';
 import type {
   ProjectLanguagesResponse,
   AvailableLanguage,
 } from '@sudobility/whisperly_types';
+import { useMemo } from 'react';
 
 /**
  * Configuration for useLanguagesManager
@@ -33,16 +36,10 @@ export interface UseLanguagesManagerResult {
   refetch: () => void;
 }
 
-const QUERY_KEYS = {
-  projectLanguages: 'whisperly-project-languages',
-  availableLanguages: 'whisperly-available-languages',
-};
-
 export function useLanguagesManager(
   config: UseLanguagesManagerConfig
 ): UseLanguagesManagerResult {
   const { baseUrl, getIdToken, entitySlug, projectId } = config;
-  const queryClient = useQueryClient();
 
   // Create client internally
   const client = useMemo(
@@ -51,29 +48,10 @@ export function useLanguagesManager(
   );
 
   // Fetch project languages
-  const projectLanguagesQuery = useQuery({
-    queryKey: [QUERY_KEYS.projectLanguages, entitySlug, projectId],
-    queryFn: () => client.getProjectLanguages(entitySlug, projectId),
-    enabled: !!entitySlug && !!projectId,
-  });
+  const projectLanguagesQuery = useProjectLanguages(client, entitySlug, projectId);
 
   // Fetch available languages
-  const availableLanguagesQuery = useQuery({
-    queryKey: [QUERY_KEYS.availableLanguages],
-    queryFn: () => client.getAvailableLanguages(),
-    staleTime: 1000 * 60 * 60, // Cache for 1 hour since this rarely changes
-  });
-
-  // Update mutation
-  const updateMutation = useMutation({
-    mutationFn: (languages: string) =>
-      client.updateProjectLanguages(entitySlug, projectId, languages),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.projectLanguages, entitySlug, projectId],
-      });
-    },
-  });
+  const availableLanguagesQuery = useAvailableLanguages(client);
 
   return {
     // Data
@@ -89,10 +67,10 @@ export function useLanguagesManager(
       null,
 
     // Actions
-    updateLanguages: updateMutation.mutateAsync,
+    updateLanguages: projectLanguagesQuery.updateProjectLanguages.mutateAsync,
     refetch: () => projectLanguagesQuery.refetch(),
 
     // Mutation state
-    isUpdating: updateMutation.isPending,
+    isUpdating: projectLanguagesQuery.updateProjectLanguages.isPending,
   };
 }

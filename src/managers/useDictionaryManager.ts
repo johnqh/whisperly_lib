@@ -1,9 +1,6 @@
 import { useCallback, useMemo, useEffect } from 'react';
 import {
   useDictionaries,
-  useCreateDictionary,
-  useUpdateDictionary,
-  useDeleteDictionary,
   WhisperlyClient,
 } from '@sudobility/whisperly_client';
 import type {
@@ -59,63 +56,54 @@ export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDic
   } = store;
 
   // Fetch dictionaries on load
-  const { data: fetchedDictionaries, isLoading: queryLoading, error: queryError } = useDictionaries(
-    client,
-    entitySlug,
-    projectId
-  );
+  const dictionariesQuery = useDictionaries(client, entitySlug, projectId);
 
   // Sync fetched data to store
   useEffect(() => {
-    if (fetchedDictionaries) {
-      setDictionaries(projectId, fetchedDictionaries);
+    if (dictionariesQuery.data) {
+      setDictionaries(projectId, dictionariesQuery.data);
     }
-  }, [fetchedDictionaries, projectId, setDictionaries]);
+  }, [dictionariesQuery.data, projectId, setDictionaries]);
 
   // Sync loading state
   useEffect(() => {
-    setLoading(queryLoading);
-  }, [queryLoading, setLoading]);
+    setLoading(dictionariesQuery.isLoading);
+  }, [dictionariesQuery.isLoading, setLoading]);
 
   // Sync error state
   useEffect(() => {
-    if (queryError) {
-      setError(queryError instanceof Error ? queryError.message : 'Failed to load dictionaries');
+    if (dictionariesQuery.error) {
+      setError(dictionariesQuery.error instanceof Error ? dictionariesQuery.error.message : 'Failed to load dictionaries');
     }
-  }, [queryError, setError]);
-
-  const createMutation = useCreateDictionary(client, entitySlug);
-  const updateMutation = useUpdateDictionary(client, entitySlug);
-  const deleteMutation = useDeleteDictionary(client, entitySlug);
+  }, [dictionariesQuery.error, setError]);
 
   const createDictionary = useCallback(
     async (data: DictionaryCreateRequest) => {
-      const result = await createMutation.mutateAsync({ projectId, data });
+      const result = await dictionariesQuery.createDictionary.mutateAsync(data);
       addDictionary(projectId, result);
       return result;
     },
-    [createMutation, projectId, addDictionary]
+    [dictionariesQuery.createDictionary, projectId, addDictionary]
   );
 
   const updateDictionary = useCallback(
     async (dictionaryId: string, data: DictionaryUpdateRequest) => {
-      const result = await updateMutation.mutateAsync({
-        projectId,
+      const result = await dictionariesQuery.updateDictionary.mutateAsync({
         dictionaryId,
         data,
       });
       storeUpdateDictionary(projectId, result);
       return result;
     },
-    [updateMutation, projectId, storeUpdateDictionary]
+    [dictionariesQuery.updateDictionary, projectId, storeUpdateDictionary]
   );
 
   const deleteDictionary = useCallback(
     async (dictionaryId: string) => {
-      await deleteMutation.mutateAsync({ projectId, dictionaryId });
+      await dictionariesQuery.deleteDictionary.mutateAsync(dictionaryId);
       removeDictionary(projectId, dictionaryId);
     },
-    [deleteMutation, projectId, removeDictionary]
+    [dictionariesQuery.deleteDictionary, projectId, removeDictionary]
   );
 
   const selectDictionary = useCallback(
@@ -137,9 +125,9 @@ export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDic
     // State
     isLoading:
       store.isLoading ||
-      createMutation.isPending ||
-      updateMutation.isPending ||
-      deleteMutation.isPending,
+      dictionariesQuery.createDictionary.isPending ||
+      dictionariesQuery.updateDictionary.isPending ||
+      dictionariesQuery.deleteDictionary.isPending,
     error: store.error,
 
     // Actions
@@ -149,8 +137,8 @@ export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDic
     selectDictionary,
 
     // Mutation states
-    isCreating: createMutation.isPending,
-    isUpdating: updateMutation.isPending,
-    isDeleting: deleteMutation.isPending,
+    isCreating: dictionariesQuery.createDictionary.isPending,
+    isUpdating: dictionariesQuery.updateDictionary.isPending,
+    isDeleting: dictionariesQuery.deleteDictionary.isPending,
   };
 }

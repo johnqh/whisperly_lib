@@ -1,7 +1,6 @@
 import { useEffect, useCallback, useMemo } from 'react';
 import {
   useSettings,
-  useUpdateSettings,
   WhisperlyClient,
 } from '@sudobility/whisperly_client';
 import type { UserSettings, UserSettingsUpdateRequest } from '@sudobility/whisperly_types';
@@ -39,7 +38,6 @@ export function useSettingsManager(config: UseSettingsManagerConfig): UseSetting
   const store = useSettingsStore();
   const { setSettings, setLoading, setError } = store;
   const settingsQuery = useSettings(client, userId);
-  const updateMutation = useUpdateSettings(client, userId);
 
   // Sync query data to store
   useEffect(() => {
@@ -60,11 +58,11 @@ export function useSettingsManager(config: UseSettingsManagerConfig): UseSetting
 
   const updateSettings = useCallback(
     async (data: UserSettingsUpdateRequest) => {
-      const result = await updateMutation.mutateAsync(data);
+      const result = await settingsQuery.updateSettings.mutateAsync(data);
       setSettings(result);
       return result;
     },
-    [updateMutation, setSettings]
+    [settingsQuery.updateSettings, setSettings]
   );
 
   const refetch = useCallback(() => {
@@ -78,7 +76,7 @@ export function useSettingsManager(config: UseSettingsManagerConfig): UseSetting
     organizationPath: store.settings?.organization_path ?? null,
 
     // State
-    isLoading: store.isLoading || updateMutation.isPending,
+    isLoading: store.isLoading || settingsQuery.updateSettings.isPending,
     error: store.error,
 
     // Actions
@@ -86,6 +84,6 @@ export function useSettingsManager(config: UseSettingsManagerConfig): UseSetting
     refetch,
 
     // Mutation states
-    isUpdating: updateMutation.isPending,
+    isUpdating: settingsQuery.updateSettings.isPending,
   };
 }
