@@ -3,13 +3,10 @@
   "workspaces": {
     "": {
       "name": "@sudobility/whisperly_lib",
-      "dependencies": {
-        "zustand": "^5.0.0",
-      },
       "devDependencies": {
         "@eslint/js": "^9.39.2",
-        "@sudobility/whisperly_client": "^1.0.20",
-        "@sudobility/whisperly_types": "^1.0.17",
+        "@sudobility/whisperly_client": "^1.0.21",
+        "@sudobility/whisperly_types": "^1.0.18",
         "@tanstack/react-query": "^5.90.5",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/react": "^16.3.1",
@@ -32,10 +29,12 @@
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.46.2",
         "vitest": "^4.0.4",
+        "zustand": "^5.0.0",
       },
       "peerDependencies": {
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
+        "zustand": ">=5.0.0",
       },
     },
   },
@@ -310,9 +309,9 @@
 
     "@sudobility/types": ["@sudobility/types@1.9.36", "", {}, "sha512-PPQAy0+fyIt6AV+2BxZG/RT0ouO/2KcZTwk8bKjwffyNhdbVfxOS4FDhgAJWoyxIdqTxdnmjMKA4vGUc16HT1g=="],
 
-    "@sudobility/whisperly_client": ["@sudobility/whisperly_client@1.0.20", "", { "peerDependencies": { "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-Ofs181it1uLfMrmfNbRBeXX8n/4Q8rO6IjYKeCdo6K5yC+k5MnOiH7udDX4WW93bCHWDhMzIRJ61epwWQm+GkA=="],
+    "@sudobility/whisperly_client": ["@sudobility/whisperly_client@1.0.21", "", { "peerDependencies": { "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-WKsrUGOCMqdsEQNml0Pdrb3iqKJioxexaOadDmM0PMOGVwGddOtstN1DIGBsoPaYhN61kXV8nvhb3gCs2fs2cA=="],
 
-    "@sudobility/whisperly_types": ["@sudobility/whisperly_types@1.0.17", "", { "peerDependencies": { "@sudobility/types": "^1.9.49" } }, "sha512-b6GWLVVm3ugWOxYOdddFYTejaZxuetWmGscIloNYKlZcml3935ddMJbzEgkUXLBZRWR3o/ewpuhV01TPGs1KWA=="],
+    "@sudobility/whisperly_types": ["@sudobility/whisperly_types@1.0.18", "", { "peerDependencies": { "@sudobility/types": "^1.9.50" } }, "sha512-iFr60TF3caXgBB7Krq9KELPBPyM/WXZHHdC3LKd77/kQHGgIMWF6MvfemCdNZzzApiZJvWxN2IdaKIgWlZvxTA=="],
 
     "@tanstack/query-core": ["@tanstack/query-core@5.90.15", "", {}, "sha512-mInIZNUZftbERE+/Hbtswfse49uUQwch46p+27gP9DWJL927UjnaWEF2t3RMOqBcXbfMdcNkPe06VyUIAZTV1g=="],
 
