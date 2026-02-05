@@ -10,6 +10,7 @@ import type {
  */
 export interface UseTranslationManagerConfig {
   baseUrl: string;
+  testMode?: boolean;
 }
 
 export interface TranslateParams {
@@ -19,7 +20,7 @@ export interface TranslateParams {
 }
 
 export function useTranslationManager(config: UseTranslationManagerConfig) {
-  const { baseUrl } = config;
+  const { baseUrl, testMode = false } = config;
 
   // Create client internally - translation doesn't need auth
   const client = useMemo(
@@ -30,7 +31,7 @@ export function useTranslationManager(config: UseTranslationManagerConfig) {
     [baseUrl]
   );
 
-  const translateMutation = useTranslate(client);
+  const translateMutation = useTranslate(client, testMode);
   const [lastResponse, setLastResponse] = useState<TranslationResponse | null>(
     null
   );
