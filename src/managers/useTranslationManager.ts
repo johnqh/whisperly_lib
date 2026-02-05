@@ -17,6 +17,7 @@ export interface TranslateParams {
   orgPath: string;
   projectName: string;
   request: TranslationRequest;
+  apiKey?: string;
 }
 
 export function useTranslationManager(config: UseTranslationManagerConfig) {
@@ -38,11 +39,12 @@ export function useTranslationManager(config: UseTranslationManagerConfig) {
 
   const translate = useCallback(
     async (params: TranslateParams) => {
-      const { orgPath, projectName, request } = params;
+      const { orgPath, projectName, request, apiKey } = params;
       const result = await translateMutation.mutateAsync({
         orgPath,
         projectName,
         request,
+        apiKey,
       });
       setLastResponse(result);
       return result;

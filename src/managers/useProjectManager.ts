@@ -31,6 +31,8 @@ export interface UseProjectManagerResult {
   createProject: (data: ProjectCreateRequest) => Promise<Project>;
   updateProject: (projectId: string, data: ProjectUpdateRequest) => Promise<Project>;
   deleteProject: (projectId: string) => Promise<void>;
+  generateApiKey: (projectId: string) => Promise<Project>;
+  deleteApiKey: (projectId: string) => Promise<Project>;
   selectProject: (projectId: string | null) => void;
   refetch: () => void;
   isCreating: boolean;
@@ -107,6 +109,24 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
     [projectsQuery.deleteProject, removeProject]
   );
 
+  const generateApiKey = useCallback(
+    async (projectId: string) => {
+      const result = await client.generateProjectApiKey(entitySlug, projectId);
+      storeUpdateProject(result);
+      return result;
+    },
+    [client, entitySlug, storeUpdateProject]
+  );
+
+  const deleteApiKey = useCallback(
+    async (projectId: string) => {
+      const result = await client.deleteProjectApiKey(entitySlug, projectId);
+      storeUpdateProject(result);
+      return result;
+    },
+    [client, entitySlug, storeUpdateProject]
+  );
+
   const selectProject = useCallback(
     (projectId: string | null) => {
       storeSelectProject(projectId);
@@ -135,6 +155,8 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
     createProject,
     updateProject,
     deleteProject,
+    generateApiKey,
+    deleteApiKey,
     selectProject,
     refetch,
 
