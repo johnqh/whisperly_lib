@@ -4,6 +4,7 @@ import {
   WhisperlyClient,
 } from '@sudobility/whisperly_client';
 import type { UserSettings, UserSettingsUpdateRequest } from '@sudobility/whisperly_types';
+import type { NetworkClient } from '@sudobility/types';
 import { useSettingsStore } from '../stores/settingsStore';
 
 /**
@@ -11,7 +12,7 @@ import { useSettingsStore } from '../stores/settingsStore';
  */
 export interface UseSettingsManagerConfig {
   baseUrl: string;
-  getIdToken: () => Promise<string | undefined>;
+  networkClient: NetworkClient;
   userId: string;
 }
 
@@ -27,12 +28,12 @@ export interface UseSettingsManagerResult {
 }
 
 export function useSettingsManager(config: UseSettingsManagerConfig): UseSettingsManagerResult {
-  const { baseUrl, getIdToken, userId } = config;
+  const { baseUrl, networkClient, userId } = config;
 
   // Create client internally
   const client = useMemo(
-    () => new WhisperlyClient({ baseUrl, getIdToken }),
-    [baseUrl, getIdToken]
+    () => new WhisperlyClient({ baseUrl, networkClient }),
+    [baseUrl, networkClient]
   );
 
   const store = useSettingsStore();

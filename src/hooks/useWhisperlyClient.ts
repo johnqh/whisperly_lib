@@ -1,23 +1,23 @@
 import { useMemo } from 'react';
 import { WhisperlyClient } from '@sudobility/whisperly_client';
-import type { UseFirebaseAuthResult } from './useFirebaseAuth';
+import type { NetworkClient } from '@sudobility/types';
 
 export interface UseWhisperlyClientOptions {
   baseUrl: string;
-  auth: UseFirebaseAuthResult;
+  networkClient: NetworkClient;
 }
 
 export function useWhisperlyClient(
   options: UseWhisperlyClientOptions
 ): WhisperlyClient {
-  const { baseUrl, auth } = options;
+  const { baseUrl, networkClient } = options;
 
   const client = useMemo(() => {
     return new WhisperlyClient({
       baseUrl,
-      getIdToken: auth.getIdToken,
+      networkClient,
     });
-  }, [baseUrl, auth.getIdToken]);
+  }, [baseUrl, networkClient]);
 
   return client;
 }

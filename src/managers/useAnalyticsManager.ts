@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useMemo } from 'react';
 import { useAnalytics, WhisperlyClient } from '@sudobility/whisperly_client';
 import type { AnalyticsResponse, UsageAggregate, UsageByProject, UsageByDate } from '@sudobility/whisperly_types';
+import type { NetworkClient } from '@sudobility/types';
 import { useAnalyticsStore } from '../stores/analyticsStore';
 
 /**
@@ -8,7 +9,7 @@ import { useAnalyticsStore } from '../stores/analyticsStore';
  */
 export interface UseAnalyticsManagerConfig {
   baseUrl: string;
-  getIdToken: () => Promise<string | undefined>;
+  networkClient: NetworkClient;
   entitySlug: string;
   startDate?: string;
   endDate?: string;
@@ -40,7 +41,7 @@ export interface UseAnalyticsManagerResult {
 export function useAnalyticsManager(config: UseAnalyticsManagerConfig): UseAnalyticsManagerResult {
   const {
     baseUrl,
-    getIdToken,
+    networkClient,
     entitySlug,
     startDate,
     endDate,
@@ -50,8 +51,8 @@ export function useAnalyticsManager(config: UseAnalyticsManagerConfig): UseAnaly
 
   // Create client internally
   const client = useMemo(
-    () => new WhisperlyClient({ baseUrl, getIdToken }),
-    [baseUrl, getIdToken]
+    () => new WhisperlyClient({ baseUrl, networkClient }),
+    [baseUrl, networkClient]
   );
 
   const store = useAnalyticsStore();

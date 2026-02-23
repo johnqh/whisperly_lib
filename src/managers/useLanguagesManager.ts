@@ -7,6 +7,7 @@ import type {
   ProjectLanguagesResponse,
   AvailableLanguage,
 } from '@sudobility/whisperly_types';
+import type { NetworkClient } from '@sudobility/types';
 import { useMemo } from 'react';
 
 /**
@@ -14,7 +15,7 @@ import { useMemo } from 'react';
  */
 export interface UseLanguagesManagerConfig {
   baseUrl: string;
-  getIdToken: () => Promise<string | undefined>;
+  networkClient: NetworkClient;
   entitySlug: string;
   projectId: string;
 }
@@ -39,12 +40,12 @@ export interface UseLanguagesManagerResult {
 export function useLanguagesManager(
   config: UseLanguagesManagerConfig
 ): UseLanguagesManagerResult {
-  const { baseUrl, getIdToken, entitySlug, projectId } = config;
+  const { baseUrl, networkClient, entitySlug, projectId } = config;
 
   // Create client internally
   const client = useMemo(
-    () => new WhisperlyClient({ baseUrl, getIdToken }),
-    [baseUrl, getIdToken]
+    () => new WhisperlyClient({ baseUrl, networkClient }),
+    [baseUrl, networkClient]
   );
 
   // Fetch project languages

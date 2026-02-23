@@ -9,6 +9,7 @@ import type {
   ProjectCreateRequest,
   ProjectUpdateRequest,
 } from '@sudobility/whisperly_types';
+import type { NetworkClient } from '@sudobility/types';
 import { useProjectStore } from '../stores/projectStore';
 
 /**
@@ -16,7 +17,7 @@ import { useProjectStore } from '../stores/projectStore';
  */
 export interface UseProjectManagerConfig {
   baseUrl: string;
-  getIdToken: () => Promise<string | undefined>;
+  networkClient: NetworkClient;
   entitySlug: string;
   /** Auto-fetch on mount when enabled (default: true) */
   autoFetch?: boolean;
@@ -41,12 +42,12 @@ export interface UseProjectManagerResult {
 }
 
 export function useProjectManager(config: UseProjectManagerConfig): UseProjectManagerResult {
-  const { baseUrl, getIdToken, entitySlug } = config;
+  const { baseUrl, networkClient, entitySlug } = config;
 
   // Create client internally
   const client = useMemo(
-    () => new WhisperlyClient({ baseUrl, getIdToken }),
-    [baseUrl, getIdToken]
+    () => new WhisperlyClient({ baseUrl, networkClient }),
+    [baseUrl, networkClient]
   );
 
   // Use selectors for state to avoid stale closure issues
@@ -172,7 +173,7 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
  */
 export interface UseProjectDetailConfig {
   baseUrl: string;
-  getIdToken: () => Promise<string | undefined>;
+  networkClient: NetworkClient;
   entitySlug: string;
   projectId: string;
 }
@@ -185,12 +186,12 @@ export interface UseProjectDetailResult {
 }
 
 export function useProjectDetail(config: UseProjectDetailConfig): UseProjectDetailResult {
-  const { baseUrl, getIdToken, entitySlug, projectId } = config;
+  const { baseUrl, networkClient, entitySlug, projectId } = config;
 
   // Create client internally
   const client = useMemo(
-    () => new WhisperlyClient({ baseUrl, getIdToken }),
-    [baseUrl, getIdToken]
+    () => new WhisperlyClient({ baseUrl, networkClient }),
+    [baseUrl, networkClient]
   );
 
   const projectQuery = useProject(client, entitySlug, projectId);

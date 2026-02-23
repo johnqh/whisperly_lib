@@ -4,12 +4,14 @@ import type {
   TranslationRequest,
   TranslationResponse,
 } from '@sudobility/whisperly_types';
+import type { NetworkClient } from '@sudobility/types';
 
 /**
  * Configuration for useTranslationManager
  */
 export interface UseTranslationManagerConfig {
   baseUrl: string;
+  networkClient: NetworkClient;
   testMode?: boolean;
 }
 
@@ -21,15 +23,12 @@ export interface TranslateParams {
 }
 
 export function useTranslationManager(config: UseTranslationManagerConfig) {
-  const { baseUrl, testMode = false } = config;
+  const { baseUrl, networkClient, testMode = false } = config;
 
-  // Create client internally - translation doesn't need auth
+  // Create client internally
   const client = useMemo(
-    () => new WhisperlyClient({
-      baseUrl,
-      getIdToken: async () => undefined,
-    }),
-    [baseUrl]
+    () => new WhisperlyClient({ baseUrl, networkClient }),
+    [baseUrl, networkClient]
   );
 
   const translateMutation = useTranslate(client, testMode);

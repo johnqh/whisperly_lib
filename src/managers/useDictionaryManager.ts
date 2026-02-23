@@ -8,6 +8,7 @@ import type {
   DictionaryUpdateRequest,
   DictionarySearchResponse,
 } from '@sudobility/whisperly_types';
+import type { NetworkClient } from '@sudobility/types';
 import { useDictionaryStore } from '../stores/dictionaryStore';
 
 /**
@@ -15,7 +16,7 @@ import { useDictionaryStore } from '../stores/dictionaryStore';
  */
 export interface UseDictionaryManagerConfig {
   baseUrl: string;
-  getIdToken: () => Promise<string | undefined>;
+  networkClient: NetworkClient;
   entitySlug: string;
   projectId: string;
 }
@@ -36,12 +37,12 @@ export interface UseDictionaryManagerResult {
 }
 
 export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDictionaryManagerResult {
-  const { baseUrl, getIdToken, entitySlug, projectId } = config;
+  const { baseUrl, networkClient, entitySlug, projectId } = config;
 
   // Create client internally
   const client = useMemo(
-    () => new WhisperlyClient({ baseUrl, getIdToken }),
-    [baseUrl, getIdToken]
+    () => new WhisperlyClient({ baseUrl, networkClient }),
+    [baseUrl, networkClient]
   );
 
   const store = useDictionaryStore();
