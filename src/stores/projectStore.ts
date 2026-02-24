@@ -59,10 +59,23 @@ export const useProjectStore = create<ProjectState>(set => ({
 }));
 
 // Selectors
+
+/** Select the full list of projects from the store */
 export const selectProjects = (state: ProjectState) => state.projects;
+
+/** Select the ID of the currently selected project, or `null` */
 export const selectSelectedProjectId = (state: ProjectState) =>
   state.selectedProjectId;
+
+/**
+ * Select the currently selected project object.
+ * Returns `null` if no project is selected or the selected ID is not found.
+ */
 export const selectSelectedProject = (state: ProjectState) =>
   state.projects.find(p => p.id === state.selectedProjectId) ?? null;
+
+/** Select the loading state for the project store */
 export const selectIsLoading = (state: ProjectState) => state.isLoading;
+
+/** Select the error message from the project store, or `null` */
 export const selectError = (state: ProjectState) => state.error;

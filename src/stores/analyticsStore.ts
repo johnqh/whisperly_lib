@@ -49,15 +49,31 @@ export const useAnalyticsStore = create<AnalyticsState>(set => ({
 }));
 
 // Selectors
+
+/** Select the full analytics response, or `null` if not loaded */
 export const selectAnalytics = (state: AnalyticsState) => state.analytics;
+
+/** Select the aggregate usage statistics, or `null` if analytics not loaded */
 export const selectAggregate = (state: AnalyticsState) =>
   state.analytics?.aggregate ?? null;
+
+/** Select usage data broken down by project. Returns an empty array if not loaded. */
 export const selectByProject = (state: AnalyticsState) =>
   state.analytics?.by_project ?? [];
+
+/** Select usage data broken down by date. Returns an empty array if not loaded. */
 export const selectByDate = (state: AnalyticsState) =>
   state.analytics?.by_date ?? [];
+
+/** Select the current date range filter */
 export const selectDateRange = (state: AnalyticsState) => state.dateRange;
+
+/** Select the current project ID filter, or `null` for all projects */
 export const selectFilterProjectId = (state: AnalyticsState) =>
   state.filterProjectId;
+
+/** Select the loading state for the analytics store */
 export const selectIsLoading = (state: AnalyticsState) => state.isLoading;
+
+/** Select the error message from the analytics store, or `null` */
 export const selectError = (state: AnalyticsState) => state.error;

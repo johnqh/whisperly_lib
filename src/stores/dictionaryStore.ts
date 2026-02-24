@@ -85,10 +85,30 @@ export const useDictionaryStore = create<DictionaryState>(set => ({
 }));
 
 // Selectors
+
+/**
+ * Selector factory that returns dictionaries for a specific project.
+ *
+ * Returns an empty array if no dictionaries exist for the given project ID.
+ *
+ * @param projectId - The project ID to select dictionaries for
+ * @returns A selector function compatible with `useDictionaryStore(selector)`
+ *
+ * @example
+ * ```ts
+ * const dictionaries = useDictionaryStore(selectDictionariesForProject('proj-123'));
+ * ```
+ */
 export const selectDictionariesForProject =
   (projectId: string) => (state: DictionaryState) =>
     state.dictionaries[projectId] ?? [];
+
+/** Select the ID of the currently selected dictionary, or `null` */
 export const selectSelectedDictionaryId = (state: DictionaryState) =>
   state.selectedDictionaryId;
+
+/** Select the loading state for the dictionary store */
 export const selectIsLoading = (state: DictionaryState) => state.isLoading;
+
+/** Select the error message from the dictionary store, or `null` */
 export const selectError = (state: DictionaryState) => state.error;

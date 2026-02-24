@@ -7,18 +7,33 @@ import type {
 import type { NetworkClient } from '@sudobility/types';
 
 /**
- * Configuration for useTranslationManager
+ * Configuration for the {@link useTranslationManager} hook.
+ *
+ * Public manager that performs translations without authentication.
+ * Uses the public `/translate` endpoint.
  */
 export interface UseTranslationManagerConfig {
+  /** Base URL for the Whisperly API (e.g., "https://api.whisperly.dev") */
   baseUrl: string;
+  /** Platform-agnostic network client for making HTTP requests */
   networkClient: NetworkClient;
+  /** Whether to use test mode, which bypasses rate limits and uses mock data. Defaults to `false`. */
   testMode?: boolean;
 }
 
+/**
+ * Parameters for a translation request.
+ *
+ * Identifies the target organization and project, plus the translation payload.
+ */
 export interface TranslateParams {
+  /** The organization's URL-safe path (e.g., "my-org") */
   orgPath: string;
+  /** The project name within the organization */
   projectName: string;
+  /** The translation request payload containing strings and target languages */
   request: TranslationRequest;
+  /** Optional API key for authenticated access. If omitted, uses public rate limits. */
   apiKey?: string;
 }
 

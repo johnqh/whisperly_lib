@@ -32,10 +32,20 @@ export const useSettingsStore = create<SettingsState>(set => ({
 }));
 
 // Selectors
+
+/** Select the full user settings object, or `null` if not loaded */
 export const selectSettings = (state: SettingsState) => state.settings;
+
+/** Select the organization display name, or `null` if settings not loaded */
 export const selectOrganizationName = (state: SettingsState) =>
   state.settings?.organization_name ?? null;
+
+/** Select the organization URL-safe path/slug, or `null` if settings not loaded */
 export const selectOrganizationPath = (state: SettingsState) =>
   state.settings?.organization_path ?? null;
+
+/** Select the loading state for the settings store */
 export const selectIsLoading = (state: SettingsState) => state.isLoading;
+
+/** Select the error message from the settings store, or `null` */
 export const selectError = (state: SettingsState) => state.error;

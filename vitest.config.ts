@@ -1,7 +1,8 @@
 import { defineConfig } from "vitest/config";
 
 // whisperly_lib supports both web and React Native
-// Using node environment ensures tests don't rely on DOM APIs
+// Store tests use node environment (no DOM needed)
+// Hook/manager tests use jsdom via @vitest-environment comment directives
 export default defineConfig({
   test: {
     globals: false,

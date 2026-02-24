@@ -11,12 +11,19 @@ import type { NetworkClient } from '@sudobility/types';
 import { useMemo } from 'react';
 
 /**
- * Configuration for useLanguagesManager
+ * Configuration for the {@link useLanguagesManager} hook.
+ *
+ * Entity and project-scoped manager that fetches the project's
+ * configured languages and the full list of available languages.
  */
 export interface UseLanguagesManagerConfig {
+  /** Base URL for the Whisperly API (e.g., "https://api.whisperly.dev") */
   baseUrl: string;
+  /** Platform-agnostic network client for making HTTP requests */
   networkClient: NetworkClient;
+  /** URL-safe slug identifying the entity/organization (e.g., "my-org") */
   entitySlug: string;
+  /** The project ID whose languages to manage */
   projectId: string;
 }
 

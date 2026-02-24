@@ -73,6 +73,7 @@ export { useFirebaseAuth, type UseFirebaseAuthResult } from './hooks/useFirebase
 
 // Utils
 export { resetAllStores } from './utils/resetAllStores';
+export { formatStoreError } from './utils/formatStoreError';
 
 // Re-export client and types for convenience
 export { WhisperlyClient, WhisperlyApiError } from '@sudobility/whisperly_client';
