@@ -56,7 +56,11 @@ export function useLanguagesManager(
   );
 
   // Fetch project languages
-  const projectLanguagesQuery = useProjectLanguages(client, entitySlug, projectId);
+  const projectLanguagesQuery = useProjectLanguages(
+    client,
+    entitySlug,
+    projectId
+  );
 
   // Fetch available languages
   const availableLanguagesQuery = useAvailableLanguages(client);

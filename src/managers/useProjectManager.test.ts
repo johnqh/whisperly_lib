@@ -84,7 +84,9 @@ vi.mock('@sudobility/whisperly_client', () => {
       return Promise.resolve(mockProjects);
     }
     getProject(_slug: string, projectId: string) {
-      return Promise.resolve(mockProjects.find(p => p.id === projectId) ?? null);
+      return Promise.resolve(
+        mockProjects.find(p => p.id === projectId) ?? null
+      );
     }
     generateProjectApiKey(_slug: string, projectId: string) {
       return Promise.resolve({
@@ -145,7 +147,8 @@ function createWrapper() {
 }
 
 // Import after mocks are set up
-const { useProjectManager, useProjectDetail } = await import('./useProjectManager');
+const { useProjectManager, useProjectDetail } =
+  await import('./useProjectManager');
 
 describe('useProjectManager', () => {
   beforeEach(() => {

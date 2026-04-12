@@ -208,7 +208,10 @@ describe('analyticsStore', () => {
     it('selectDateRange returns date range', () => {
       useAnalyticsStore.getState().setDateRange('2024-01-01', '2024-01-31');
       const result = selectDateRange(useAnalyticsStore.getState());
-      expect(result).toEqual({ startDate: '2024-01-01', endDate: '2024-01-31' });
+      expect(result).toEqual({
+        startDate: '2024-01-01',
+        endDate: '2024-01-31',
+      });
     });
 
     it('selectFilterProjectId returns filter project id', () => {

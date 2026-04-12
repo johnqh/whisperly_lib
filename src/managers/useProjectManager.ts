@@ -50,7 +50,10 @@ export interface UseProjectManagerResult {
   /** Create a new project. Adds the result to the local store on success. */
   createProject: (data: ProjectCreateRequest) => Promise<Project>;
   /** Update an existing project by ID. Updates the local store on success. */
-  updateProject: (projectId: string, data: ProjectUpdateRequest) => Promise<Project>;
+  updateProject: (
+    projectId: string,
+    data: ProjectUpdateRequest
+  ) => Promise<Project>;
   /** Delete a project by ID. Removes it from the local store on success. */
   deleteProject: (projectId: string) => Promise<void>;
   /** Generate a new API key for a project. Updates the project in the local store. */
@@ -69,7 +72,9 @@ export interface UseProjectManagerResult {
   isDeleting: boolean;
 }
 
-export function useProjectManager(config: UseProjectManagerConfig): UseProjectManagerResult {
+export function useProjectManager(
+  config: UseProjectManagerConfig
+): UseProjectManagerResult {
   const { baseUrl, networkClient, entitySlug } = config;
 
   // Create client internally
@@ -121,7 +126,10 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
 
   const updateProject = useCallback(
     async (projectId: string, data: ProjectUpdateRequest) => {
-      const result = await projectsQuery.updateProject.mutateAsync({ projectId, data });
+      const result = await projectsQuery.updateProject.mutateAsync({
+        projectId,
+        data,
+      });
       storeUpdateProject(result);
       return result;
     },
@@ -172,7 +180,11 @@ export function useProjectManager(config: UseProjectManagerConfig): UseProjectMa
     selectedProject: projects.find(p => p.id === selectedProjectId) ?? null,
 
     // State
-    isLoading: isLoadingFromStore || projectsQuery.createProject.isPending || projectsQuery.updateProject.isPending || projectsQuery.deleteProject.isPending,
+    isLoading:
+      isLoadingFromStore ||
+      projectsQuery.createProject.isPending ||
+      projectsQuery.updateProject.isPending ||
+      projectsQuery.deleteProject.isPending,
     error: errorFromStore,
 
     // Actions
@@ -223,7 +235,9 @@ export interface UseProjectDetailResult {
   refetch: () => void;
 }
 
-export function useProjectDetail(config: UseProjectDetailConfig): UseProjectDetailResult {
+export function useProjectDetail(
+  config: UseProjectDetailConfig
+): UseProjectDetailResult {
   const { baseUrl, networkClient, entitySlug, projectId } = config;
 
   // Create client internally

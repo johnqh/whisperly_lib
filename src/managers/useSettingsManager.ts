@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useMemo } from 'react';
-import {
-  useSettings,
-  WhisperlyClient,
-} from '@sudobility/whisperly_client';
-import type { UserSettings, UserSettingsUpdateRequest } from '@sudobility/whisperly_types';
+import { useSettings, WhisperlyClient } from '@sudobility/whisperly_client';
+import type {
+  UserSettings,
+  UserSettingsUpdateRequest,
+} from '@sudobility/whisperly_types';
 import type { NetworkClient } from '@sudobility/types';
 import { useSettingsStore } from '../stores/settingsStore';
 import { formatStoreError } from '../utils/formatStoreError';
@@ -47,7 +47,9 @@ export interface UseSettingsManagerResult {
   isUpdating: boolean;
 }
 
-export function useSettingsManager(config: UseSettingsManagerConfig): UseSettingsManagerResult {
+export function useSettingsManager(
+  config: UseSettingsManagerConfig
+): UseSettingsManagerResult {
   const { baseUrl, networkClient, userId } = config;
 
   // Create client internally

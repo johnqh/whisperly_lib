@@ -1,8 +1,5 @@
 import { useCallback, useMemo, useEffect } from 'react';
-import {
-  useDictionaries,
-  WhisperlyClient,
-} from '@sudobility/whisperly_client';
+import { useDictionaries, WhisperlyClient } from '@sudobility/whisperly_client';
 import type {
   DictionaryCreateRequest,
   DictionaryUpdateRequest,
@@ -49,9 +46,14 @@ export interface UseDictionaryManagerResult {
   /** Error message from the most recent failed operation, or `null` */
   error: string | null;
   /** Create a new dictionary entry. Adds it to the local store on success. */
-  createDictionary: (data: DictionaryCreateRequest) => Promise<DictionarySearchResponse>;
+  createDictionary: (
+    data: DictionaryCreateRequest
+  ) => Promise<DictionarySearchResponse>;
   /** Update an existing dictionary entry by ID. Updates the local store on success. */
-  updateDictionary: (dictionaryId: string, data: DictionaryUpdateRequest) => Promise<DictionarySearchResponse>;
+  updateDictionary: (
+    dictionaryId: string,
+    data: DictionaryUpdateRequest
+  ) => Promise<DictionarySearchResponse>;
   /** Delete a dictionary entry by ID. Removes it from the local store on success. */
   deleteDictionary: (dictionaryId: string) => Promise<void>;
   /** Set the selected dictionary ID. Pass `null` to deselect. */
@@ -64,7 +66,9 @@ export interface UseDictionaryManagerResult {
   isDeleting: boolean;
 }
 
-export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDictionaryManagerResult {
+export function useDictionaryManager(
+  config: UseDictionaryManagerConfig
+): UseDictionaryManagerResult {
   const { baseUrl, networkClient, entitySlug, projectId } = config;
 
   // Create client internally
@@ -149,7 +153,8 @@ export function useDictionaryManager(config: UseDictionaryManagerConfig): UseDic
     dictionaries,
     selectedDictionaryId: store.selectedDictionaryId,
     selectedDictionary:
-      dictionaries.find(d => d.dictionary_id === store.selectedDictionaryId) ?? null,
+      dictionaries.find(d => d.dictionary_id === store.selectedDictionaryId) ??
+      null,
 
     // State
     isLoading:

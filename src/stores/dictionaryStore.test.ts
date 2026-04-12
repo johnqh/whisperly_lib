@@ -8,7 +8,10 @@ import {
 } from './dictionaryStore';
 import type { DictionarySearchResponse } from '@sudobility/whisperly_types';
 
-const mockDictionary = (id: string, translations: Record<string, string>): DictionarySearchResponse => ({
+const mockDictionary = (
+  id: string,
+  translations: Record<string, string>
+): DictionarySearchResponse => ({
   dictionary_id: id,
   translations,
 });
@@ -44,38 +47,67 @@ describe('dictionaryStore', () => {
       ];
       useDictionaryStore.getState().setDictionaries('proj-1', dictionaries);
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(2);
+      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(
+        2
+      );
     });
 
     it('replaces existing dictionaries for a project', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
-      useDictionaryStore.getState().setDictionaries('proj-1', [mockDictionary('d2', { en: 'world' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [mockDictionary('d2', { en: 'world' })]);
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(1);
-      expect(useDictionaryStore.getState().dictionaries['proj-1']![0]!.translations.en).toBe('world');
+      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(
+        1
+      );
+      expect(
+        useDictionaryStore.getState().dictionaries['proj-1']![0]!.translations
+          .en
+      ).toBe('world');
     });
 
     it('does not affect other projects', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
-      useDictionaryStore.getState().setDictionaries('proj-2', [mockDictionary('d2', { en: 'world' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-2', [mockDictionary('d2', { en: 'world' })]);
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(1);
-      expect(useDictionaryStore.getState().dictionaries['proj-2']).toHaveLength(1);
+      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(
+        1
+      );
+      expect(useDictionaryStore.getState().dictionaries['proj-2']).toHaveLength(
+        1
+      );
     });
   });
 
   describe('addDictionary', () => {
     it('adds a dictionary to an existing project', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
-      useDictionaryStore.getState().addDictionary('proj-1', mockDictionary('d2', { en: 'world' }));
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
+      useDictionaryStore
+        .getState()
+        .addDictionary('proj-1', mockDictionary('d2', { en: 'world' }));
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(2);
+      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(
+        2
+      );
     });
 
     it('adds a dictionary to a new project', () => {
-      useDictionaryStore.getState().addDictionary('proj-1', mockDictionary('d1', { en: 'hello' }));
+      useDictionaryStore
+        .getState()
+        .addDictionary('proj-1', mockDictionary('d1', { en: 'hello' }));
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(1);
+      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(
+        1
+      );
     });
   });
 
@@ -87,7 +119,10 @@ describe('dictionaryStore', () => {
       const updated = mockDictionary('d1', { en: 'updated-hello' });
       useDictionaryStore.getState().updateDictionary('proj-1', updated);
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']![0]!.translations.en).toBe('updated-hello');
+      expect(
+        useDictionaryStore.getState().dictionaries['proj-1']![0]!.translations
+          .en
+      ).toBe('updated-hello');
     });
 
     it('does not modify other dictionaries', () => {
@@ -98,24 +133,35 @@ describe('dictionaryStore', () => {
       const updated = mockDictionary('d1', { en: 'updated-hello' });
       useDictionaryStore.getState().updateDictionary('proj-1', updated);
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']![1]!.translations.en).toBe('world');
+      expect(
+        useDictionaryStore.getState().dictionaries['proj-1']![1]!.translations
+          .en
+      ).toBe('world');
     });
   });
 
   describe('removeDictionary', () => {
     it('removes a dictionary from a project', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [
-        mockDictionary('d1', { en: 'hello' }),
-        mockDictionary('d2', { en: 'world' }),
-      ]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [
+          mockDictionary('d1', { en: 'hello' }),
+          mockDictionary('d2', { en: 'world' }),
+        ]);
       useDictionaryStore.getState().removeDictionary('proj-1', 'd1');
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(1);
-      expect(useDictionaryStore.getState().dictionaries['proj-1']![0]!.dictionary_id).toBe('d2');
+      expect(useDictionaryStore.getState().dictionaries['proj-1']).toHaveLength(
+        1
+      );
+      expect(
+        useDictionaryStore.getState().dictionaries['proj-1']![0]!.dictionary_id
+      ).toBe('d2');
     });
 
     it('clears selectedDictionaryId if removed', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
       useDictionaryStore.getState().selectDictionary('d1');
       useDictionaryStore.getState().removeDictionary('proj-1', 'd1');
 
@@ -123,10 +169,12 @@ describe('dictionaryStore', () => {
     });
 
     it('keeps selectedDictionaryId if different dictionary removed', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [
-        mockDictionary('d1', { en: 'hello' }),
-        mockDictionary('d2', { en: 'world' }),
-      ]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [
+          mockDictionary('d1', { en: 'hello' }),
+          mockDictionary('d2', { en: 'world' }),
+        ]);
       useDictionaryStore.getState().selectDictionary('d1');
       useDictionaryStore.getState().removeDictionary('proj-1', 'd2');
 
@@ -169,18 +217,28 @@ describe('dictionaryStore', () => {
 
   describe('clearProjectDictionaries', () => {
     it('clears dictionaries for a specific project', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
-      useDictionaryStore.getState().setDictionaries('proj-2', [mockDictionary('d2', { en: 'world' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-2', [mockDictionary('d2', { en: 'world' })]);
       useDictionaryStore.getState().clearProjectDictionaries('proj-1');
 
-      expect(useDictionaryStore.getState().dictionaries['proj-1']).toBeUndefined();
-      expect(useDictionaryStore.getState().dictionaries['proj-2']).toHaveLength(1);
+      expect(
+        useDictionaryStore.getState().dictionaries['proj-1']
+      ).toBeUndefined();
+      expect(useDictionaryStore.getState().dictionaries['proj-2']).toHaveLength(
+        1
+      );
     });
   });
 
   describe('reset', () => {
     it('resets to initial state', () => {
-      useDictionaryStore.getState().setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
+      useDictionaryStore
+        .getState()
+        .setDictionaries('proj-1', [mockDictionary('d1', { en: 'hello' })]);
       useDictionaryStore.getState().selectDictionary('d1');
       useDictionaryStore.getState().setLoading(true);
       useDictionaryStore.getState().setError('error');
@@ -198,12 +256,16 @@ describe('dictionaryStore', () => {
       const dictionaries = [mockDictionary('d1', { en: 'hello' })];
       useDictionaryStore.getState().setDictionaries('proj-1', dictionaries);
 
-      const result = selectDictionariesForProject('proj-1')(useDictionaryStore.getState());
+      const result = selectDictionariesForProject('proj-1')(
+        useDictionaryStore.getState()
+      );
       expect(result).toEqual(dictionaries);
     });
 
     it('selectDictionariesForProject returns empty array for unknown project', () => {
-      const result = selectDictionariesForProject('unknown')(useDictionaryStore.getState());
+      const result = selectDictionariesForProject('unknown')(
+        useDictionaryStore.getState()
+      );
       expect(result).toEqual([]);
     });
 

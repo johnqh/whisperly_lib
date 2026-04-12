@@ -178,7 +178,9 @@ describe('projectStore', () => {
   describe('setError', () => {
     it('should set error state', () => {
       useProjectStore.getState().setError('Something went wrong');
-      expect(selectError(useProjectStore.getState())).toBe('Something went wrong');
+      expect(selectError(useProjectStore.getState())).toBe(
+        'Something went wrong'
+      );
     });
 
     it('should allow clearing error', () => {

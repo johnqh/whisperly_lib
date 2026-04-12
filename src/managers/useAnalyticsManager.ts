@@ -1,6 +1,11 @@
 import { useEffect, useCallback, useMemo } from 'react';
 import { useAnalytics, WhisperlyClient } from '@sudobility/whisperly_client';
-import type { AnalyticsResponse, UsageAggregate, UsageByProject, UsageByDate } from '@sudobility/whisperly_types';
+import type {
+  AnalyticsResponse,
+  UsageAggregate,
+  UsageByProject,
+  UsageByDate,
+} from '@sudobility/whisperly_types';
 import type { NetworkClient } from '@sudobility/types';
 import { useAnalyticsStore } from '../stores/analyticsStore';
 import { formatStoreError } from '../utils/formatStoreError';
@@ -74,7 +79,9 @@ export interface UseAnalyticsManagerResult {
   refetch: () => void;
 }
 
-export function useAnalyticsManager(config: UseAnalyticsManagerConfig): UseAnalyticsManagerResult {
+export function useAnalyticsManager(
+  config: UseAnalyticsManagerConfig
+): UseAnalyticsManagerResult {
   const {
     baseUrl,
     networkClient,

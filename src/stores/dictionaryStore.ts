@@ -8,9 +8,18 @@ interface DictionaryState {
   error: string | null;
 
   // Actions
-  setDictionaries: (projectId: string, dictionaries: DictionarySearchResponse[]) => void;
-  addDictionary: (projectId: string, dictionary: DictionarySearchResponse) => void;
-  updateDictionary: (projectId: string, dictionary: DictionarySearchResponse) => void;
+  setDictionaries: (
+    projectId: string,
+    dictionaries: DictionarySearchResponse[]
+  ) => void;
+  addDictionary: (
+    projectId: string,
+    dictionary: DictionarySearchResponse
+  ) => void;
+  updateDictionary: (
+    projectId: string,
+    dictionary: DictionarySearchResponse
+  ) => void;
   removeDictionary: (projectId: string, dictionaryId: string) => void;
   selectDictionary: (dictionaryId: string | null) => void;
   setLoading: (isLoading: boolean) => void;

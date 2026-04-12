@@ -4,10 +4,13 @@
   "workspaces": {
     "": {
       "name": "@sudobility/whisperly_lib",
+      "dependencies": {
+        "@sudobility/types": "^1.9.61",
+      },
       "devDependencies": {
         "@eslint/js": "^9.39.2",
-        "@sudobility/whisperly_client": "^1.0.41",
-        "@sudobility/whisperly_types": "^1.0.32",
+        "@sudobility/whisperly_client": "^1.0.42",
+        "@sudobility/whisperly_types": "^1.0.33",
         "@tanstack/react-query": "^5.90.5",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/react": "^16.3.1",
@@ -308,11 +311,11 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.36", "", {}, "sha512-PPQAy0+fyIt6AV+2BxZG/RT0ouO/2KcZTwk8bKjwffyNhdbVfxOS4FDhgAJWoyxIdqTxdnmjMKA4vGUc16HT1g=="],
+    "@sudobility/types": ["@sudobility/types@1.9.61", "", {}, "sha512-SODGpstB/iKfK3H/4BvJx/FBcc1h3gutUjGotyxN19VnOfWyzaDoEmW7eyoxOAYhZyXMXagSiii+NIEZvuxKog=="],
 
-    "@sudobility/whisperly_client": ["@sudobility/whisperly_client@1.0.41", "", { "peerDependencies": { "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-pSHJc/0g3Sv9xoi2d4qUHEWaEn4lpFc7u3J1iEs25c2jUjX5uf6uWTxjWQbMyyXXUfF4qkgjFf/vtizBAojlDQ=="],
+    "@sudobility/whisperly_client": ["@sudobility/whisperly_client@1.0.42", "", { "peerDependencies": { "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-jKCSzIFrXjSl1ZnUDg6+OC8gI7v/vNoWXZ7b6lI/vpjBBxOK7Xx4rvfzAwSLdXX2pq6D0767nQbRPl1tJ3TzYA=="],
 
-    "@sudobility/whisperly_types": ["@sudobility/whisperly_types@1.0.32", "", { "peerDependencies": { "@sudobility/types": "^1.9.61" } }, "sha512-6blzinnIGYXY3v6wfVCCAelAVfHGyOrQt2YM3oy35F8rNgn/bt7wvQUbGwftpYkSfrODy695Brqpu11HYa1ITg=="],
+    "@sudobility/whisperly_types": ["@sudobility/whisperly_types@1.0.33", "", { "peerDependencies": { "@sudobility/types": "^1.9.61" } }, "sha512-Q05OzUWDNPx6lO518Y8Mu8B18t1y7aWob9tS+jD8OE8h2Q9DSsN3SF0wgaAgnSEsSfyPqTBQqtEJVScojaMhbg=="],
 
     "@tanstack/query-core": ["@tanstack/query-core@5.90.15", "", {}, "sha512-mInIZNUZftbERE+/Hbtswfse49uUQwch46p+27gP9DWJL927UjnaWEF2t3RMOqBcXbfMdcNkPe06VyUIAZTV1g=="],
 
