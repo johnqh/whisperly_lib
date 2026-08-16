@@ -5,12 +5,12 @@
     "": {
       "name": "@sudobility/whisperly_lib",
       "dependencies": {
-        "@sudobility/types": "^1.9.62",
+        "@sudobility/types": "^1.9.65",
       },
       "devDependencies": {
         "@eslint/js": "^9.39.2",
-        "@sudobility/whisperly_client": "^1.0.47",
-        "@sudobility/whisperly_types": "^1.0.34",
+        "@sudobility/whisperly_client": "^1.0.48",
+        "@sudobility/whisperly_types": "^1.0.35",
         "@tanstack/react-query": "^5.90.5",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/react": "^16.3.1",
@@ -311,11 +311,11 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.62", "", {}, "sha512-GOkz5oE7Fmlolba2aemBF2fKPtH4I2lHAjVta+fqZAoAV72DQaWYzVEjTwKZs/ACY/g9Z262IDa7lEh+IOrn7w=="],
+    "@sudobility/types": ["@sudobility/types@1.9.65", "", {}, "sha512-NSq2/naehtQO3s6uhCa9+zGLQZkPNYhlb9NUtjS704ppvc+UbtGoSAzNQGLORDbha2YGJORE3/xs2UARZQdroA=="],
 
-    "@sudobility/whisperly_client": ["@sudobility/whisperly_client@1.0.47", "", { "peerDependencies": { "@sudobility/types": "^1.9.62", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-IbWHaZjLMejTSqWnKcc4eWJ0S1ORVagrJszbsB5ZytiredAXQYfdd51uJPIYQ2IidrA+mRH/MpCCUIwwWiLAkQ=="],
+    "@sudobility/whisperly_client": ["@sudobility/whisperly_client@1.0.48", "", { "peerDependencies": { "@sudobility/types": "^1.9.65", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0" } }, "sha512-ghdn5q3ur+nZFsqeNJhXX0aGV4VjaDXPYrftsVRJkzVP83pUJXPl+ln/Rl/aHdQw6q6AsdNtWR6Um2Mknf8knA=="],
 
-    "@sudobility/whisperly_types": ["@sudobility/whisperly_types@1.0.34", "", { "peerDependencies": { "@sudobility/types": "^1.9.62" } }, "sha512-g5tD54v7fdPEfrPDc02ip0woMzdXWHG05yMdHZPDLZlemjnFKDXOeXtZ4Oen2LGrgfQFnqTJVnMANnCWtbV7CQ=="],
+    "@sudobility/whisperly_types": ["@sudobility/whisperly_types@1.0.35", "", { "peerDependencies": { "@sudobility/types": "^1.9.65" } }, "sha512-0FX8oFPg5ng5/nlhXjh2po1ZYE9KEthoosDMpikXR8y7+J//ZkoFQA4GHG65qj7IKiYCJBdzi1bO/aX+gXh4Aw=="],
 
     "@tanstack/query-core": ["@tanstack/query-core@5.90.15", "", {}, "sha512-mInIZNUZftbERE+/Hbtswfse49uUQwch46p+27gP9DWJL927UjnaWEF2t3RMOqBcXbfMdcNkPe06VyUIAZTV1g=="],
 
