@@ -1,5 +1,10 @@
 # CLAUDE.md - whisperly_lib
 
+> **Git policy — never auto-commit or auto-push.** Leave your work in the working tree.
+> Run `git commit`, `git push`, `gh pr create`, or `scripts/push_all.sh` **only when the user
+> explicitly asks in that turn**. Approval for an earlier change does not carry forward, and
+> finishing a task is not permission to commit it.
+
 ## Project Overview
 
 `@sudobility/whisperly_lib` is the frontend business logic library for Whisperly. It provides Zustand stores for state management and manager hooks that sync TanStack Query data with local state. This library sits between the API client (`whisperly_client`) and the UI (`whisperly_app`).
@@ -206,3 +211,7 @@ const { user, loading, getIdToken } = useFirebaseAuth();
 
 - `dist/index.js` — ESM module
 - `dist/index.d.ts` — Type declarations
+
+## Git Workflow
+
+- Do not use feature branches for code changes. Always stay on the current branch.
